@@ -1,6 +1,7 @@
 package com.staninna.aufmachen.mail
 
 import com.staninna.aufmachen.data.HeaderEntity
+import com.staninna.aufmachen.engine.baseDomain
 import java.nio.ByteBuffer
 import java.nio.charset.CharacterCodingException
 import java.nio.charset.CodingErrorAction
@@ -34,24 +35,6 @@ data class HeaderFields(
         unsubOneClick = unsubOneClick, bulk = bulk, attach = attach, seen = seen, flagged = flagged,
         important = important, sent = sent, category = category, syncedAt = syncedAt, initialScan = initialScan,
     )
-}
-
-private val MULTI_PART_TLDS = setOf(
-    "co.uk", "org.uk", "ac.uk", "gov.uk", "com.au", "net.au", "co.nz",
-    "co.za", "com.br", "co.jp", "com.tr", "com.mx", "co.in", "com.sg",
-)
-
-/**
- * Private copy of `base_domain` from the prototype. Switch to `engine.baseDomain` once
- * `engine/Domains.kt` is merged.
- */
-internal fun mailBaseDomain(host: String): String {
-    val h = host.lowercase().trim { it == '.' || it == ' ' || it == '>' }
-    val parts = h.split(".")
-    if (parts.size >= 3 && parts.takeLast(2).joinToString(".") in MULTI_PART_TLDS) {
-        return parts.takeLast(3).joinToString(".")
-    }
-    return if (parts.size >= 2) parts.takeLast(2).joinToString(".") else h
 }
 
 /** Port of `record_from_headers`, `decode` and `parse_date` from mail_triage.py. */
@@ -89,7 +72,7 @@ object HeaderParser {
             dateEpochDay = parseDate(raw("Date"), today)?.toEpochDay(),
             fromAddr = addr,
             fromName = name.take(120),
-            fromDomain = if (addr.contains('@')) mailBaseDomain(addr.substringAfterLast('@')) else "",
+            fromDomain = if (addr.contains('@')) baseDomain(addr.substringAfterLast('@')) else "",
             toAddrs = toCut,
             subject = decode(raw("Subject")).take(300),
             unsubHeader = unsub,

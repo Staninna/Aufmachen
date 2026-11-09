@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.lifecycleScope
 import com.staninna.aufmachen.data.AppSettings
@@ -37,6 +38,10 @@ class MainActivity : AppCompatActivity() {
         setContent {
             val settings by container.settings.flow.collectAsState(initial = null)
             val s: AppSettings = settings ?: return@setContent
+            // A lock switched on while the app is open (end of onboarding, settings) must not
+            // lock the user out of the session that just set it. It applies from the next start.
+            val firstLockMode = remember { s.lockMode }
+            if (firstLockMode == LockMode.NONE && s.lockMode != LockMode.NONE) unlocked = true
             AufmachenTheme(s.theme) {
                 if (s.lockMode != LockMode.NONE && !unlocked) {
                     LockScreen(s.lockMode) { unlocked = true }
