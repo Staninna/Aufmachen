@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="nav_home">Start</string>
+    <string name="nav_migrate">Verhuizen</string>
+    <string name="nav_unsubscribe">Afmelden</string>
+    <string name="nav_dormant">Slapend</string>
+    <string name="nav_people">Mensen</string>
+    <string name="alerts_title">Meldingen</string>
+    <string name="readiness_title">Gereedheid</string>
+    <string name="settings_title">Instellingen</string>
+</resources>

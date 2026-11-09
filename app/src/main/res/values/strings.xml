@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">Aufmachen</string>
+    <string name="nav_home">Home</string>
+    <string name="nav_migrate">Migrate</string>
+    <string name="nav_unsubscribe">Unsubscribe</string>
+    <string name="nav_dormant">Dormant</string>
+    <string name="nav_people">People</string>
+    <string name="alerts_title">Alerts</string>
+    <string name="readiness_title">Readiness</string>
+    <string name="settings_title">Settings</string>
+</resources>
