@@ -26,4 +26,17 @@
         <item quantity="one">%d year ago</item>
         <item quantity="other">%d years ago</item>
     </plurals>
+    <string name="tier_critical">Critical</string>
+    <string name="tier_important">Important</string>
+    <string name="tier_account">Account</string>
+    <string name="tier_low">Low</string>
+    <string name="tier_trash">Trash</string>
+    <string name="status_todo">To do</string>
+    <string name="status_changed">Changed (unverified)</string>
+    <string name="status_verified">Verified</string>
+    <string name="status_deleted">Deleted</string>
+    <string name="status_deletion_requested">Deletion requested</string>
+    <string name="status_unsubscribed">Unsubscribed</string>
+    <string name="status_ignored">Ignored</string>
+    <string name="status_failed">Failed: still mailing Gmail</string>
 </resources>
