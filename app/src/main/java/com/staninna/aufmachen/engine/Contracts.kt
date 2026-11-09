@@ -82,13 +82,13 @@ data class ClaudeAnswer(
 
 /** Owner: parsers area. */
 object ClaudePrompt {
-    fun migrate(f: PromptFacts): String = TODO("parsers area")
-    fun delete(f: PromptFacts): String = TODO("parsers area")
+    fun migrate(f: PromptFacts): String = ClaudePromptBuilder.migrate(f)
+    fun delete(f: PromptFacts): String = ClaudePromptBuilder.delete(f)
 }
 
 /** Owner: parsers area. Returns null when the block format is not found. */
 object ClaudeAnswerParser {
-    fun parse(text: String): ClaudeAnswer? = TODO("parsers area")
+    fun parse(text: String): ClaudeAnswer? = ClaudeAnswerParse.parse(text)
 }
 
 // ---------------------------------------------------------------- Tuta PDF proof (parsers area)
@@ -111,13 +111,15 @@ data class ProofMatch(val groupKey: String, val score: Double, val reasons: List
 /** Owner: parsers area. */
 object TutaPdfParser {
     /** [text] is the PDF text layer in reading order; null when it is not a Tuta export. */
-    fun parse(title: String?, text: String, links: List<String>): TutaPdfFields? = TODO("parsers area")
+    fun parse(title: String?, text: String, links: List<String>): TutaPdfFields? =
+        TutaPdfParse.parse(title, text, links)
 }
 
 /** Owner: parsers area. Highest score first; [HIGH_CONFIDENCE] and above may skip the picker. */
 object ProofMatcher {
     const val HIGH_CONFIDENCE = 0.75
-    fun rank(fields: TutaPdfFields, candidates: List<ProofCandidate>): List<ProofMatch> = TODO("parsers area")
+    fun rank(fields: TutaPdfFields, candidates: List<ProofCandidate>): List<ProofMatch> =
+        ProofRanker.rank(fields, candidates)
 }
 
 // ---------------------------------------------------------------- Google sign-in (parsers area)
@@ -127,16 +129,19 @@ data class NameMatch(val name: String, val groupKey: String, val score: Double)
 /** Owner: parsers area. */
 object GoogleConnections {
     /** App and site names from text copied off myaccount.google.com/connections. */
-    fun parse(clipboard: String): List<String> = TODO("parsers area")
+    fun parse(clipboard: String): List<String> = GoogleConn.parse(clipboard)
 
     /** Best service per name, above a fuzzy threshold. */
-    fun match(names: List<String>, candidates: List<ProofCandidate>): List<NameMatch> = TODO("parsers area")
+    fun match(names: List<String>, candidates: List<ProofCandidate>): List<NameMatch> =
+        GoogleConn.match(names, candidates)
 
     /** True when a subject from a Google account/security sender hints at third-party access. */
-    fun isThirdPartyAccessHint(fromAddr: String, subject: String): Boolean = TODO("parsers area")
+    fun isThirdPartyAccessHint(fromAddr: String, subject: String): Boolean =
+        GoogleConn.isThirdPartyAccessHint(fromAddr, subject)
 
     /** Service names mentioned in such a subject, matched to candidates. */
-    fun candidatesFromSubject(subject: String, candidates: List<ProofCandidate>): List<NameMatch> = TODO("parsers area")
+    fun candidatesFromSubject(subject: String, candidates: List<ProofCandidate>): List<NameMatch> =
+        GoogleConn.candidatesFromSubject(subject, candidates)
 }
 
 // ---------------------------------------------------------------- mail templates (parsers area)
@@ -146,10 +151,11 @@ object Templates {
     data class Mail(val subject: String, val body: String)
 
     /** GDPR / AVG Art. 17 erasure request, sent from the old address. */
-    fun gdprErasure(serviceName: String, oldAddress: String, dutch: Boolean): Mail = TODO("parsers area")
+    fun gdprErasure(serviceName: String, oldAddress: String, dutch: Boolean): Mail =
+        MailTemplates.gdprErasure(serviceName, oldAddress, dutch)
 
     /** "I've moved" note to people, with the new main address. */
-    fun moved(newAddress: String, dutch: Boolean): Mail = TODO("parsers area")
+    fun moved(newAddress: String, dutch: Boolean): Mail = MailTemplates.moved(newAddress, dutch)
 
     fun isDutchDomain(domain: String): Boolean = domain.endsWith(".nl") || domain.endsWith(".be")
 }
