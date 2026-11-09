@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="lists_cancel">Cancel</string>
+    <string name="lists_select_all">Select all</string>
+    <string name="lists_selected_count">%1$d selected</string>
+    <string name="lists_row_menu">Row menu</string>
+    <string name="lists_yes">yes</string>
+    <string name="lists_no">no</string>
+
+    <!-- Unsubscribe list -->
+    <string name="lists_show_done">Show done</string>
+    <string name="lists_unsub_bar">Unsubscribe %1$d</string>
+    <string name="lists_unsub_empty">No newsletter senders left to unsubscribe from.</string>
+    <string name="lists_unsub_row_stats">%1$d mails in 12 months, %2$d%% read, last seen %3$s</string>
+    <string name="lists_open_gmail">Open in Gmail</string>
+    <string name="lists_done_mark">Done</string>
+    <string name="lists_method_oneclick">One-click</string>
+    <string name="lists_method_email">Email</string>
+    <string name="lists_method_web">Web</string>
+    <string name="lists_method_none">None</string>
+
+    <!-- Unsubscribe confirm -->
+    <string name="lists_confirm_title">Confirm unsubscribe</string>
+    <string name="lists_confirm_empty">Nothing selected.</string>
+    <string name="lists_confirm_counts">One-click: %1$d. Email: %2$d. Web: %3$d.</string>
+    <string name="lists_confirm_cannot">%1$d sender(s) cannot be handled and will be skipped.</string>
+    <string name="lists_confirm_no_imap">The old account mail settings are missing, so emails cannot be sent. Those senders use their web link when they have one, otherwise they are skipped.</string>
+    <string name="lists_confirm_go">Confirm, unsubscribe %1$d</string>
+    <string name="lists_confirm_running">Working through the list, one sender at a time.</string>
+    <string name="lists_confirm_retry">Retry %1$d failed</string>
+    <string name="lists_confirm_close">Close</string>
+    <string name="lists_confirm_summary">Done: %1$d. Failed: %2$d. Skipped: %3$d.</string>
+    <string name="lists_confirm_watchdog">The watchdog flags any sender that still mails you after 14 days.</string>
+    <string name="lists_confirm_no_method">No usable unsubscribe method.</string>
+    <string name="lists_confirm_skip_nomethod">No usable unsubscribe method.</string>
+    <string name="lists_confirm_skipped_by_you">You skipped it.</string>
+    <string name="lists_confirm_failed_generic">The request did not go through.</string>
+    <string name="lists_confirm_button">Confirm</string>
+    <string name="lists_will_oneclick">POST one-click request to %1$s</string>
+    <string name="lists_will_email">Send an email from %1$s to %2$s (subject: %3$s)</string>
+    <string name="lists_will_web">Open %1$s in the browser</string>
+    <string name="lists_will_fallback">Email is not possible without the old account mail settings, so the web link is used.</string>
+    <string name="lists_state_running">Working...</string>
+    <string name="lists_state_done">Done</string>
+    <string name="lists_state_failed">Failed: %1$s</string>
+    <string name="lists_state_skipped">Skipped. %1$s</string>
+    <string name="lists_web_step">Web link %1$d of %2$d: %3$s</string>
+    <string name="lists_web_hint">Finish the unsubscribe on %1$s in the browser, come back and tap Done.</string>
+    <string name="lists_web_open_again">Open again</string>
+    <string name="lists_web_skip">Skip</string>
+    <string name="lists_web_done">Done, next</string>
+    <string name="lists_timeline_oneclick">Unsubscribe request sent to %1$s</string>
+    <string name="lists_timeline_email">Unsubscribe email sent to %1$s</string>
+
+    <!-- Dormant -->
+    <string name="lists_dormant_show_handled">Show handled</string>
+    <string name="lists_dormant_empty">No dormant accounts to deal with.</string>
+    <string name="lists_dormant_row">%1$s, quiet for %2$d years, last seen %3$s</string>
+    <string name="lists_dormant_ask">Ask Claude how to delete</string>
+    <string name="lists_dormant_mark_deleted">Mark deleted</string>
+    <string name="lists_dormant_ignore">Ignore</string>
+    <string name="lists_dormant_gdpr">GDPR request</string>
+    <string name="lists_dormant_walk">Claude %1$d of %2$d: %3$s</string>
+    <string name="lists_dormant_next">Next</string>
+    <string name="lists_dormant_finish">Finish</string>
+    <string name="lists_dormant_stop">Stop</string>
+    <string name="lists_dormant_confirm_deleted_title">Mark %1$d as deleted?</string>
+    <string name="lists_dormant_confirm_deleted_body">These accounts get the status Deleted. The watchdog then flags any new mail from them.</string>
+    <string name="lists_dormant_confirm_ignore_title">Ignore %1$d accounts?</string>
+    <string name="lists_dormant_confirm_ignore_body">These accounts get the status Ignored and leave your lists.</string>
+
+    <!-- People -->
+    <string name="lists_tell_yes">YES</string>
+    <string name="lists_tell_maybe">maybe</string>
+    <string name="lists_tell_no">no</string>
+    <string name="lists_people_not_told">not told yet</string>
+    <string name="lists_people_empty">No people to show.</string>
+    <string name="lists_people_row">You sent %1$d, they sent %2$d, two-way %3$s, last contact %4$s</string>
+    <string name="lists_people_told">Told</string>
+    <string name="lists_people_compose">Compose I\'ve moved</string>
+    <string name="lists_people_mark_told">Mark told</string>
+    <string name="lists_people_mark_not_told">Mark not told</string>
+
+    <!-- Compose moved -->
+    <string name="lists_moved_title">I\'ve moved</string>
+    <string name="lists_moved_empty">No recipients selected.</string>
+    <string name="lists_moved_explain">This opens your mail app with a draft. Send it from the Tuta app, so it comes from your new address. Nothing is sent from here.</string>
+    <string name="lists_moved_no_address">No new main address is set. Set your domain in Settings first.</string>
+    <string name="lists_moved_language">Language</string>
+    <string name="lists_moved_en">EN</string>
+    <string name="lists_moved_nl">NL</string>
+    <string name="lists_moved_subject">Subject</string>
+    <string name="lists_moved_body">Message</string>
+    <string name="lists_moved_mode_bcc">All in one mail, recipients in BCC</string>
+    <string name="lists_moved_mode_each">One mail per person</string>
+    <string name="lists_moved_recipients">Recipients (%1$d)</string>
+    <string name="lists_moved_open_bcc">Open mail app (%1$d in BCC)</string>
+    <string name="lists_moved_open_one">Open mail for this person</string>
+    <string name="lists_moved_person">Person %1$d of %2$d: %3$s</string>
+    <string name="lists_moved_sent_next">Sent, next</string>
+    <string name="lists_moved_i_sent_it">I sent it</string>
+    <string name="lists_moved_finished">Done. The people you sent to are marked as told.</string>
+    <string name="lists_moved_chooser">Send with</string>
+    <string name="lists_moved_no_mail_app">No mail app found</string>
+</resources>
