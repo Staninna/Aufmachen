@@ -55,7 +55,7 @@
     <!-- Dormant -->
     <string name="lists_dormant_show_handled">Show handled</string>
     <string name="lists_dormant_empty">No dormant accounts to deal with.</string>
-    <string name="lists_dormant_row">%1$s, quiet for %2$d years, last seen %3$s</string>
+    <string name="lists_dormant_row">quiet for %1$d years, last seen %2$s</string>
     <string name="lists_dormant_ask">Ask Claude how to delete</string>
     <string name="lists_dormant_mark_deleted">Mark deleted</string>
     <string name="lists_dormant_ignore">Ignore</string>

@@ -182,7 +182,8 @@ private fun DormantRow(sv: ServiceView, checked: Boolean, onToggle: () -> Unit, 
         Column(Modifier.weight(1f).padding(vertical = 8.dp)) {
             Text(sv.name, style = MaterialTheme.typography.titleSmall)
             Text(
-                stringResource(R.string.lists_dormant_row, sv.stats.category, years, relativeDay(ctx, sv.stats.lastEpochDay)),
+                listOf(sv.stats.category, stringResource(R.string.lists_dormant_row, years, relativeDay(ctx, sv.stats.lastEpochDay)))
+                    .filter { it.isNotBlank() }.joinToString(", "),
                 style = MaterialTheme.typography.bodySmall,
             )
         }

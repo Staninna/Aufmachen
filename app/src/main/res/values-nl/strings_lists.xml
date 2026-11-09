@@ -55,7 +55,7 @@
     <!-- Dormant -->
     <string name="lists_dormant_show_handled">Afgehandelde tonen</string>
     <string name="lists_dormant_empty">Geen slapende accounts om iets mee te doen.</string>
-    <string name="lists_dormant_row">%1$s, %2$d jaar stil, laatst gezien %3$s</string>
+    <string name="lists_dormant_row">%1$d jaar stil, laatst gezien %2$s</string>
     <string name="lists_dormant_ask">Vraag Claude hoe je verwijdert</string>
     <string name="lists_dormant_mark_deleted">Markeer als verwijderd</string>
     <string name="lists_dormant_ignore">Negeren</string>

@@ -11,7 +11,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
@@ -138,7 +141,7 @@ fun OnboardingScreen(nav: NavHostController) {
 
     Scaffold(
         topBar = {
-            Column(Modifier.padding(horizontal = 16.dp, vertical = 12.dp)) {
+            Column(Modifier.statusBarsPadding().padding(horizontal = 16.dp, vertical = 12.dp)) {
                 Text(
                     stringResource(R.string.setup_step_of, vm.step + 1, STEPS),
                     style = MaterialTheme.typography.labelMedium,
@@ -150,7 +153,7 @@ fun OnboardingScreen(nav: NavHostController) {
             }
         },
         bottomBar = {
-            Row(Modifier.fillMaxWidth().padding(16.dp), horizontalArrangement = Arrangement.SpaceBetween) {
+            Row(Modifier.fillMaxWidth().navigationBarsPadding().imePadding().padding(16.dp), horizontalArrangement = Arrangement.SpaceBetween) {
                 if (vm.step > 0) OutlinedButton(onClick = { vm.step-- }, enabled = !vm.starting) {
                     Text(stringResource(R.string.setup_back))
                 } else Row {}
