@@ -9,4 +9,21 @@
     <string name="alerts_title">Alerts</string>
     <string name="readiness_title">Readiness</string>
     <string name="settings_title">Settings</string>
+    <string name="common_prompt_copied">Prompt copied, paste it in Claude</string>
+    <string name="common_copied">Copied</string>
+    <string name="common_no_browser">No app can open this link</string>
+    <string name="common_today">today</string>
+    <string name="common_never">never</string>
+    <plurals name="common_days_ago">
+        <item quantity="one">%d day ago</item>
+        <item quantity="other">%d days ago</item>
+    </plurals>
+    <plurals name="common_months_ago">
+        <item quantity="one">%d month ago</item>
+        <item quantity="other">%d months ago</item>
+    </plurals>
+    <plurals name="common_years_ago">
+        <item quantity="one">%d year ago</item>
+        <item quantity="other">%d years ago</item>
+    </plurals>
 </resources>

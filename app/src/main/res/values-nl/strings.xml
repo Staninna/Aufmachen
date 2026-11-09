@@ -8,4 +8,21 @@
     <string name="alerts_title">Meldingen</string>
     <string name="readiness_title">Gereedheid</string>
     <string name="settings_title">Instellingen</string>
+    <string name="common_prompt_copied">Prompt gekopieerd, plak hem in Claude</string>
+    <string name="common_copied">Gekopieerd</string>
+    <string name="common_no_browser">Geen app kan deze link openen</string>
+    <string name="common_today">vandaag</string>
+    <string name="common_never">nooit</string>
+    <plurals name="common_days_ago">
+        <item quantity="one">%d dag geleden</item>
+        <item quantity="other">%d dagen geleden</item>
+    </plurals>
+    <plurals name="common_months_ago">
+        <item quantity="one">%d maand geleden</item>
+        <item quantity="other">%d maanden geleden</item>
+    </plurals>
+    <plurals name="common_years_ago">
+        <item quantity="one">%d jaar geleden</item>
+        <item quantity="other">%d jaar geleden</item>
+    </plurals>
 </resources>
