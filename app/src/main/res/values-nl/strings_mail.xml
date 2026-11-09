@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="mail_channel_scan">Mailboxscan</string>
+    <string name="mail_channel_scan_desc">Voortgang van de eerste mailboxscan.</string>
+    <string name="mail_channel_alerts">Meldingen</string>
+    <string name="mail_channel_alerts_desc">Een dienst stuurt nog steeds mail naar je oude adres.</string>
+    <string name="mail_channel_digest">Wekelijks overzicht</string>
+    <string name="mail_channel_digest_desc">Een wekelijks overzicht van open meldingen en voortgang.</string>
+
+    <string name="mail_scan_title">Je mailbox wordt gescand</string>
+    <string name="mail_scan_progress">%1$d van %2$d, nog ongeveer %3$d min</string>
+    <string name="mail_scan_progress_unknown">%1$d van %2$d</string>
+    <string name="mail_scan_categories">Categorieën en vlaggen worden gelezen</string>
+    <string name="mail_mbox_title">Je mbox-bestand wordt geïmporteerd</string>
+    <string name="mail_mbox_progress">%1$d berichten gelezen</string>
+
+    <string name="mail_alert_title">Mailt nog steeds naar je oude adres</string>
+    <plurals name="mail_alert_text">
+        <item quantity="one">%d nieuwe fout. Tik om te bekijken.</item>
+        <item quantity="other">%d nieuwe fouten. Tik om te bekijken.</item>
+    </plurals>
+
+    <string name="mail_digest_title">Wekelijks overzicht</string>
+    <string name="mail_digest_text">%1$d open meldingen. %2$d diensten klaar, %3$d nog te doen.</string>
+
+    <string name="mail_err_auth">Inloggen mislukt. Gmail heeft een app-wachtwoord nodig, niet je gewone wachtwoord. Maak er een aan in je Google-account onder 2-stapsverificatie en plak hem hier.</string>
+    <string name="mail_err_offline">Geen verbinding met de mailserver. Controleer je netwerk en probeer het opnieuw.</string>
+    <string name="mail_err_tls">Er kon geen beveiligde verbinding met de mailserver worden opgezet.</string>
+    <string name="mail_err_generic">De mailserver gaf een fout. Probeer het later opnieuw.</string>
+    <string name="mail_err_not_configured">Mail-login is nog niet ingesteld.</string>
+    <string name="mail_err_mbox">Het mbox-bestand kon niet worden gelezen. Kies het opnieuw bij Instellingen.</string>
+    <string name="mail_err_unsub_https">Afmelden met één klik heeft een https-link nodig.</string>
+    <string name="mail_err_unsub_status">De afzender antwoordde met HTTP %d.</string>
+</resources>

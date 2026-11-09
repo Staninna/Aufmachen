@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="proof_title">Bewijs toevoegen</string>
+    <string name="proof_how_title">Zo voeg je bewijs toe</string>
+    <string name="proof_how_body">Open in de Tuta-app de bevestigingsmail die de dienst naar je nieuwe adres stuurde. Exporteer of deel die als pdf en kies Aufmachen. Of kies hier het pdf-bestand.</string>
+    <string name="proof_pick_pdf">Kies een pdf</string>
+    <string name="proof_copy_failed">Dat bestand kon niet worden gelezen.</string>
+    <string name="proof_loading">De pdf wordt gelezen</string>
+    <string name="proof_err_unreadable">Dit bestand is geen leesbare pdf.</string>
+    <string name="proof_err_no_text">Deze pdf heeft geen tekstlaag. Aufmachen gebruikt geen OCR. Exporteer de mail opnieuw vanuit de Tuta-app.</string>
+    <string name="proof_discard">Weggooien</string>
+    <string name="proof_not_tuta">Dit lijkt geen Tuta-export. Je kunt zelf nog steeds een dienst kiezen.</string>
+
+    <string name="proof_fields_title">Wat Aufmachen las</string>
+    <string name="proof_field_name">Naam afzender</string>
+    <string name="proof_field_to">Aan</string>
+    <string name="proof_field_date">Datum</string>
+    <string name="proof_field_reply_to">Antwoord naar</string>
+    <string name="proof_field_links">Links</string>
+    <string name="proof_none">geen</string>
+
+    <string name="proof_not_new_title">Geen nieuw adres</string>
+    <string name="proof_not_new_body">Deze mail is niet naar een van je nieuwe adressen gestuurd, dus die bewijst niets.</string>
+    <string name="proof_use_anyway">Toch gebruiken</string>
+    <string name="proof_address_differs">Deze mail ging naar %1$s, maar de dienst gebruikt %2$s.</string>
+    <string name="proof_address_differs_none">Deze mail ging naar %1$s. De dienst heeft geen adres ingesteld.</string>
+    <string name="proof_update_address">Adres van deze dienst bijwerken naar %1$s</string>
+
+    <string name="proof_picker_title">Welke dienst heeft het verstuurd?</string>
+    <string name="proof_top_matches">Beste overeenkomsten</string>
+    <string name="proof_no_matches">Geen waarschijnlijke match. Zoek in alle diensten.</string>
+    <string name="proof_search">Diensten zoeken</string>
+    <string name="proof_search_all">Alle diensten</string>
+    <string name="proof_search_empty">Geen dienst gevonden.</string>
+    <string name="proof_score">Overeenkomst %1$d%%</string>
+    <string name="proof_no_services">Nog geen diensten. Scan eerst je mailbox.</string>
+
+    <string name="proof_confirm_title">Bewijs voor %1$s?</string>
+    <string name="proof_confirm_body">Ontvangen om %1$s op %2$s</string>
+    <string name="proof_confirm_body_manual">Met de hand toegevoegd, zonder Tuta-export.</string>
+    <string name="proof_date_unknown">een onbekende datum</string>
+    <string name="proof_reasons">Waarom het overeenkomt</string>
+    <string name="proof_confirm">Bevestigen</string>
+    <string name="proof_pick_another">Kies een andere dienst</string>
+    <string name="proof_saving_failed">Het bewijs kon niet worden opgeslagen.</string>
+    <string name="proof_timeline">Bewijs: mail van %1$s ontvangen op %2$s</string>
+    <string name="proof_timeline_manual">Bewijs: pdf toegevoegd voor %1$s</string>
+    <string name="proof_status_note">bewijs</string>
+
+    <string name="proof_google_title">Inloggen met Google</string>
+    <string name="proof_google_step1_title">Stap 1. Open je Google-verbindingen</string>
+    <string name="proof_google_step1_body">Open de pagina, selecteer alle tekst, kopieer die en kom hier terug.</string>
+    <string name="proof_google_open">Google-verbindingen openen</string>
+    <string name="proof_google_step2_title">Stap 2. Plak wat je hebt gekopieerd</string>
+    <string name="proof_google_paste">Plakken vanaf klembord</string>
+    <string name="proof_google_clipboard_empty">Het klembord is leeg. Kopieer eerst de paginatekst.</string>
+    <string name="proof_google_nothing_parsed">Geen app- of sitenamen gevonden in die tekst. Controleer of je de hele pagina hebt gekopieerd.</string>
+    <string name="proof_google_found">Gevonden in je Google-account</string>
+    <string name="proof_google_no_match">Geen match</string>
+    <string name="proof_google_pick_service">Kies een dienst</string>
+    <string name="proof_google_unmatched">Niet in je dienstenlijst</string>
+    <string name="proof_google_suggestions">Suggesties uit je mail</string>
+    <string name="proof_google_suggestions_body">Google-mails die toegang van derden tot deze diensten noemen.</string>
+    <string name="proof_google_suggestions_empty">Geen suggesties in je opgeslagen mail.</string>
+    <string name="proof_google_suggestions_error">Je opgeslagen mail kon niet worden gelezen.</string>
+    <string name="proof_google_confirm">%1$d markeren als Inloggen met Google</string>
+    <string name="proof_google_done">%1$d diensten gemarkeerd.</string>
+    <string name="proof_google_note">Inloggen met Google gedetecteerd</string>
+</resources>

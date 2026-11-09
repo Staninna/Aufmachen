@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="lists_cancel">Annuleren</string>
+    <string name="lists_select_all">Alles selecteren</string>
+    <string name="lists_selected_count">%1$d geselecteerd</string>
+    <string name="lists_row_menu">Rijmenu</string>
+    <string name="lists_yes">ja</string>
+    <string name="lists_no">nee</string>
+
+    <!-- Unsubscribe list -->
+    <string name="lists_show_done">Afgeronde tonen</string>
+    <string name="lists_unsub_bar">Afmelden %1$d</string>
+    <string name="lists_unsub_empty">Geen nieuwsbriefafzenders meer om je voor af te melden.</string>
+    <string name="lists_unsub_row_stats">%1$d mails in 12 maanden, %2$d%% gelezen, laatst gezien %3$s</string>
+    <string name="lists_open_gmail">Openen in Gmail</string>
+    <string name="lists_done_mark">Klaar</string>
+    <string name="lists_method_oneclick">Met één klik</string>
+    <string name="lists_method_email">E-mail</string>
+    <string name="lists_method_web">Web</string>
+    <string name="lists_method_none">Geen</string>
+
+    <!-- Unsubscribe confirm -->
+    <string name="lists_confirm_title">Afmelden bevestigen</string>
+    <string name="lists_confirm_empty">Niets geselecteerd.</string>
+    <string name="lists_confirm_counts">Met één klik: %1$d. E-mail: %2$d. Web: %3$d.</string>
+    <string name="lists_confirm_cannot">%1$d afzender(s) kan niet worden verwerkt en wordt overgeslagen.</string>
+    <string name="lists_confirm_no_imap">De mailinstellingen van het oude account ontbreken, dus er kan geen e-mail worden verstuurd. Die afzenders gebruiken hun weblink als ze er een hebben, anders worden ze overgeslagen.</string>
+    <string name="lists_confirm_go">Bevestigen, %1$d afmelden</string>
+    <string name="lists_confirm_running">De lijst wordt één afzender tegelijk afgewerkt.</string>
+    <string name="lists_confirm_retry">%1$d mislukte opnieuw proberen</string>
+    <string name="lists_confirm_close">Sluiten</string>
+    <string name="lists_confirm_summary">Klaar: %1$d. Mislukt: %2$d. Overgeslagen: %3$d.</string>
+    <string name="lists_confirm_watchdog">De watchdog meldt elke afzender die na 14 dagen nog mailt.</string>
+    <string name="lists_confirm_no_method">Geen bruikbare afmeldmethode.</string>
+    <string name="lists_confirm_skip_nomethod">Geen bruikbare afmeldmethode.</string>
+    <string name="lists_confirm_skipped_by_you">Je hebt deze overgeslagen.</string>
+    <string name="lists_confirm_failed_generic">Het verzoek is niet gelukt.</string>
+    <string name="lists_confirm_button">Bevestigen</string>
+    <string name="lists_will_oneclick">POST-verzoek met één klik naar %1$s</string>
+    <string name="lists_will_email">Stuur een mail van %1$s naar %2$s (onderwerp: %3$s)</string>
+    <string name="lists_will_web">%1$s openen in de browser</string>
+    <string name="lists_will_fallback">Mailen kan niet zonder de mailinstellingen van het oude account, dus de weblink wordt gebruikt.</string>
+    <string name="lists_state_running">Bezig...</string>
+    <string name="lists_state_done">Klaar</string>
+    <string name="lists_state_failed">Mislukt: %1$s</string>
+    <string name="lists_state_skipped">Overgeslagen. %1$s</string>
+    <string name="lists_web_step">Weblink %1$d van %2$d: %3$s</string>
+    <string name="lists_web_hint">Rond de afmelding af op %1$s in de browser, kom terug en tik op Klaar.</string>
+    <string name="lists_web_open_again">Opnieuw openen</string>
+    <string name="lists_web_skip">Overslaan</string>
+    <string name="lists_web_done">Klaar, volgende</string>
+    <string name="lists_timeline_oneclick">Afmeldverzoek verstuurd naar %1$s</string>
+    <string name="lists_timeline_email">Afmeldmail verstuurd naar %1$s</string>
+
+    <!-- Dormant -->
+    <string name="lists_dormant_show_handled">Afgehandelde tonen</string>
+    <string name="lists_dormant_empty">Geen slapende accounts om iets mee te doen.</string>
+    <string name="lists_dormant_row">%1$s, %2$d jaar stil, laatst gezien %3$s</string>
+    <string name="lists_dormant_ask">Vraag Claude hoe je verwijdert</string>
+    <string name="lists_dormant_mark_deleted">Markeer als verwijderd</string>
+    <string name="lists_dormant_ignore">Negeren</string>
+    <string name="lists_dormant_gdpr">AVG-verzoek</string>
+    <string name="lists_dormant_walk">Claude %1$d van %2$d: %3$s</string>
+    <string name="lists_dormant_next">Volgende</string>
+    <string name="lists_dormant_finish">Afronden</string>
+    <string name="lists_dormant_stop">Stoppen</string>
+    <string name="lists_dormant_confirm_deleted_title">%1$d markeren als verwijderd?</string>
+    <string name="lists_dormant_confirm_deleted_body">Deze accounts krijgen de status Verwijderd. De watchdog meldt daarna elke nieuwe mail van deze accounts.</string>
+    <string name="lists_dormant_confirm_ignore_title">%1$d accounts negeren?</string>
+    <string name="lists_dormant_confirm_ignore_body">Deze accounts krijgen de status Genegeerd en verdwijnen uit je lijsten.</string>
+
+    <!-- People -->
+    <string name="lists_tell_yes">JA</string>
+    <string name="lists_tell_maybe">misschien</string>
+    <string name="lists_tell_no">nee</string>
+    <string name="lists_people_not_told">nog niet verteld</string>
+    <string name="lists_people_empty">Geen mensen om te tonen.</string>
+    <string name="lists_people_row">Jij stuurde %1$d, zij stuurden %2$d, heen en terug %3$s, laatste contact %4$s</string>
+    <string name="lists_people_told">Verteld</string>
+    <string name="lists_people_compose">Opstellen: ik ben verhuisd</string>
+    <string name="lists_people_mark_told">Markeer als verteld</string>
+    <string name="lists_people_mark_not_told">Markeer als niet verteld</string>
+
+    <!-- Compose moved -->
+    <string name="lists_moved_title">Ik ben verhuisd</string>
+    <string name="lists_moved_empty">Geen ontvangers geselecteerd.</string>
+    <string name="lists_moved_explain">Dit opent je mailapp met een concept. Verstuur het vanuit de Tuta-app, zodat het van je nieuwe adres komt. Er wordt hier niets verstuurd.</string>
+    <string name="lists_moved_no_address">Er is geen nieuw hoofdadres ingesteld. Stel eerst je domein in bij Instellingen.</string>
+    <string name="lists_moved_language">Taal</string>
+    <string name="lists_moved_en">EN</string>
+    <string name="lists_moved_nl">NL</string>
+    <string name="lists_moved_subject">Onderwerp</string>
+    <string name="lists_moved_body">Bericht</string>
+    <string name="lists_moved_mode_bcc">Alles in één mail, ontvangers in BCC</string>
+    <string name="lists_moved_mode_each">Eén mail per persoon</string>
+    <string name="lists_moved_recipients">Ontvangers (%1$d)</string>
+    <string name="lists_moved_open_bcc">Mailapp openen (%1$d in BCC)</string>
+    <string name="lists_moved_open_one">Mail voor deze persoon openen</string>
+    <string name="lists_moved_person">Persoon %1$d van %2$d: %3$s</string>
+    <string name="lists_moved_sent_next">Verstuurd, volgende</string>
+    <string name="lists_moved_i_sent_it">Ik heb hem verstuurd</string>
+    <string name="lists_moved_finished">Klaar. De mensen naar wie je hebt gestuurd, zijn als verteld gemarkeerd.</string>
+    <string name="lists_moved_chooser">Versturen met</string>
+    <string name="lists_moved_no_mail_app">Geen mailapp gevonden</string>
+</resources>

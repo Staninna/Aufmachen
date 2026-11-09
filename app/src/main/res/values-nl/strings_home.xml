@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Home -->
+    <string name="home_empty_title">Nog niets gescand</string>
+    <string name="home_empty_body">Diensten verschijnen hier zodra de eerste scan van de oude mailbox klaar is.</string>
+    <string name="home_sync_scanning">De oude mailbox wordt gescand</string>
+    <string name="home_sync_progress">%1$d van %2$d berichten</string>
+    <string name="home_sync_last">Laatste sync: %1$s</string>
+    <string name="home_sync_error">Laatste sync mislukt: %1$s</string>
+    <string name="home_sync_error_hint">Controleer je verbinding en het app-wachtwoord bij Instellingen, en trek daarna omlaag om opnieuw te proberen.</string>
+    <string name="home_failed_count">%1$d mislukt</string>
+    <string name="home_readiness_title">Klaar om Gmail te sluiten: %1$d%%</string>
+    <string name="home_readiness_ready">Niets meer open. Open de gids Gmail sluiten.</string>
+    <plurals name="home_next_up">
+        <item quantity="one">Volgende: %d dienst in de wachtrij</item>
+        <item quantity="other">Volgende: %d diensten in de wachtrij</item>
+    </plurals>
+    <string name="home_next_stats">%1$d mails, laatst gezien %2$s, %3$d beveiligingsmails, %4$d factuurmails</string>
+    <string name="home_next_why">Waarom: %1$s</string>
+    <string name="home_next_address">Nieuw adres: %1$s</string>
+    <string name="home_queue_done">Wachtrij leeg. Elke dienst met een account heeft een status of is uitgesteld.</string>
+    <string name="home_action_ask">Vraag Claude</string>
+    <string name="home_action_settings_page">Instellingenpagina openen</string>
+    <string name="home_action_copy">Nieuw adres kopiëren</string>
+    <string name="home_action_changed">Markeer als gewijzigd</string>
+    <string name="home_action_skip">Overslaan</string>
+    <string name="home_action_delete">Account verwijderen</string>
+    <string name="home_action_ignore">Negeren</string>
+    <plurals name="home_alerts_open">
+        <item quantity="one">%d open melding</item>
+        <item quantity="other">%d open meldingen</item>
+    </plurals>
+    <string name="home_alerts_hint">Een dienst die je hebt verhuisd, stuurt nog mail naar het oude adres.</string>
+    <string name="home_cancel">Annuleren</string>
+
+    <!-- Migrate -->
+    <string name="home_migrate_search">Zoek op domein of naam</string>
+    <string name="home_migrate_clear">Zoekopdracht wissen</string>
+    <string name="home_migrate_count">%1$d van %2$d diensten</string>
+    <string name="home_migrate_category">Categorie</string>
+    <string name="home_migrate_all_categories">Alle categorieën</string>
+    <string name="home_migrate_failed">Mislukt</string>
+    <string name="home_migrate_google">Google-login</string>
+    <string name="home_migrate_steps">Heeft stappen</string>
+    <string name="home_migrate_score">score %1$d</string>
+    <string name="home_migrate_row_stats">%1$d mails, laatst gezien %2$s</string>
+    <string name="home_migrate_empty_title">Nog geen diensten</string>
+    <string name="home_migrate_empty_body">Diensten met een account verschijnen na de eerste scan.</string>
+    <string name="home_migrate_nomatch_title">Geen resultaten</string>
+    <string name="home_migrate_nomatch_body">Probeer een andere zoekopdracht of wis een paar filters.</string>
+
+    <!-- Readiness -->
+    <string name="home_blocker_critical">Controleer %1$s</string>
+    <string name="home_blocker_alert">Los de melding van %1$s op</string>
+    <string name="home_blocker_login">Wissel de Google-login van %1$s</string>
+    <string name="home_blocker_person">Vertel %1$s over het nieuwe adres</string>
+    <string name="home_blocker_takeout">Maak een Google Takeout</string>
+    <string name="home_group_critical">Kritieke diensten gecontroleerd</string>
+    <string name="home_group_alerts">Watchdog-meldingen van de afgelopen 60 dagen</string>
+    <string name="home_group_login">Google-logins gewisseld</string>
+    <string name="home_group_people">Mensen verteld</string>
+    <string name="home_group_takeout">Takeout</string>
+    <string name="home_group_clear">Klaar</string>
+    <string name="home_group_left">%1$d over</string>
+    <string name="home_readiness_percent">%1$d%%</string>
+    <string name="home_readiness_summary">%1$d van %2$d punten afgerond</string>
+    <string name="home_login_switched">Login gewijzigd</string>
+    <string name="home_takeout_done">Takeout klaar</string>
+    <string name="home_takeout_open">Takeout openen</string>
+    <string name="home_close_button">Gids Gmail sluiten</string>
+    <string name="home_close_locked">Ontgrendelt bij 100%. Je kunt het eerder overslaan.</string>
+    <string name="home_override_title">De gids nu al openen?</string>
+    <string name="home_override_body">%1$d blokkades staan nog open. Gmail sluiten met die blokkades open kan mail laten verdwijnen of je buitensluiten van accounts.</string>
+    <string name="home_override_confirm">Toch doorgaan</string>
+
+    <!-- Close Gmail -->
+    <string name="home_close_title">Gmail sluiten</string>
+    <string name="home_close_intro">Werk deze punten in volgorde af. Elk vinkje wordt op dit apparaat opgeslagen.</string>
+    <string name="home_end_takeout">Takeout gedownload en gecontroleerd</string>
+    <string name="home_end_takeout_body">Open het archief en bekijk een paar mails en bestanden voordat je het vertrouwt.</string>
+    <string name="home_end_payments">Betaalmethoden verwijderd</string>
+    <string name="home_end_payments_body">Verwijder opgeslagen kaarten en bankrekeningen uit het Google-account.</string>
+    <string name="home_end_payments_link">Google Pay openen</string>
+    <string name="home_end_play">Google Play en Android-account</string>
+    <string name="home_end_play_body">Controleer aankopen en abonnementen, het Google-account op je telefoon en de aanmelding bij de Play Store. Gmail verwijderen kan die onderbreken.</string>
+    <string name="home_end_recovery">Herstelmail en -telefoon elders verwijderd</string>
+    <string name="home_end_recovery_body">Andere diensten gebruiken het Gmail-adres misschien nog als herstelmail. Wijzig dat voordat het niet meer werkt.</string>
+    <string name="home_end_delete">De Gmail-dienst verwijderen</string>
+    <string name="home_end_delete_body">Dit verwijdert de mailbox. Het Google-account zelf kan blijven bestaan.</string>
+    <string name="home_end_delete_link">Google-accountinstellingen openen</string>
+
+    <!-- Alerts -->
+    <string name="home_alerts_empty_title">Geen meldingen</string>
+    <string name="home_alerts_empty_body">Hier zie je een fout als een verhuisde dienst weer naar het oude adres mailt.</string>
+    <string name="home_alerts_none_open">Geen open meldingen.</string>
+    <string name="home_alerts_dismissed">Verworpen (%1$d)</string>
+    <string name="home_alerts_sender">Stuurde mail naar de oude inbox, van %1$s</string>
+    <string name="home_alerts_reason">Verworpen: %1$s</string>
+    <string name="home_alerts_open_service">Dienst openen</string>
+    <string name="home_alerts_ask">Vraag Claude</string>
+    <string name="home_alerts_dismiss">Verwerpen</string>
+    <string name="home_dismiss_title">Deze melding verwerpen</string>
+    <string name="home_dismiss_added">Afzenderadres toegevoegd bij de dienst</string>
+    <string name="home_dismiss_oneoff">Eenmalig verwacht</string>
+    <string name="home_dismiss_not_this">Niet deze dienst</string>
+    <string name="home_dismiss_other">Overig</string>
+    <string name="home_dismiss_reason">Reden</string>
+</resources>
