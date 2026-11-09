@@ -9,6 +9,7 @@ import androidx.work.ExistingWorkPolicy
 import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import androidx.work.await
 import com.staninna.aufmachen.container
@@ -49,9 +50,28 @@ internal object SchedulerImpl {
 
     fun syncNow(context: Context) {
         val app = context.applicationContext
-        // Manual refresh runs on any network: the user asked for it right now.
-        val req = OneTimeWorkRequestBuilder<SyncWorker>().setConstraints(net(false)).build()
-        WorkManager.getInstance(app).enqueueUniqueWork(WORK_SYNC_NOW, ExistingWorkPolicy.KEEP, req)
+        scope.launch {
+            val c = app.container
+            if (c.settings.get().imap == null) return@launch
+            val wm = WorkManager.getInstance(app)
+            if (c.db.sync().get(HeaderEntity.SOURCE_IMAP)?.initialDone != true) {
+                // First scan not done yet. A manual tap starts it now on any network, instead of
+                // leaving it queued behind the Wi-Fi-only constraint. A scan already running is kept.
+                val running = wm.getWorkInfosForUniqueWork(WORK_SCAN).get()
+                    .any { it.state == WorkInfo.State.RUNNING }
+                if (!running) {
+                    val req = OneTimeWorkRequestBuilder<ScanWorker>()
+                        .setConstraints(net(false))
+                        .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 1, TimeUnit.MINUTES)
+                        .build()
+                    wm.enqueueUniqueWork(WORK_SCAN, ExistingWorkPolicy.REPLACE, req)
+                }
+                return@launch
+            }
+            // Manual refresh runs on any network: the user asked for it right now.
+            val req = OneTimeWorkRequestBuilder<SyncWorker>().setConstraints(net(false)).build()
+            wm.enqueueUniqueWork(WORK_SYNC_NOW, ExistingWorkPolicy.KEEP, req)
+        }
     }
 
     fun schedulePeriodic(context: Context) {

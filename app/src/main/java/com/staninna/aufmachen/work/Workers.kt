@@ -38,6 +38,12 @@ class ScanWorker(ctx: Context, params: WorkerParameters) : CoroutineWorker(ctx, 
         val c = applicationContext.container
         val t0 = System.currentTimeMillis()
         var p0 = -1
+        // Show the notification right away, before login and the UID listing, which can take a while.
+        runCatching {
+            setForeground(foregroundInfo(Notifier.progress(
+                applicationContext, applicationContext.getString(R.string.mail_scan_title),
+                applicationContext.getString(R.string.mail_scan_connecting), 0, 0)))
+        }
         return try {
             ImapScanner.run(c) { p: ScanProgress ->
                 if (p0 < 0) p0 = p.processed

@@ -11,6 +11,7 @@
     <string name="mail_scan_progress">%1$d of %2$d, about %3$d min left</string>
     <string name="mail_scan_progress_unknown">%1$d of %2$d</string>
     <string name="mail_scan_categories">Reading categories and flags</string>
+    <string name="mail_scan_connecting">Connecting to your mailbox</string>
     <string name="mail_mbox_title">Importing your mbox file</string>
     <string name="mail_mbox_progress">%1$d messages read</string>
 

@@ -11,6 +11,7 @@
     <string name="mail_scan_progress">%1$d van %2$d, nog ongeveer %3$d min</string>
     <string name="mail_scan_progress_unknown">%1$d van %2$d</string>
     <string name="mail_scan_categories">Categorieën en vlaggen worden gelezen</string>
+    <string name="mail_scan_connecting">Verbinden met je mailbox</string>
     <string name="mail_mbox_title">Je mbox-bestand wordt geïmporteerd</string>
     <string name="mail_mbox_progress">%1$d berichten gelezen</string>
 
