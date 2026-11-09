@@ -39,4 +39,5 @@
     <string name="status_unsubscribed">Unsubscribed</string>
     <string name="status_ignored">Ignored</string>
     <string name="status_failed">Failed: still mailing Gmail</string>
+    <string name="google_login_menu">Sign in with Google</string>
 </resources>

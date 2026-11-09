@@ -55,6 +55,8 @@ fun TabTopBar(title: String, nav: NavHostController) {
             DropdownMenu(menu, onDismissRequest = { menu = false }) {
                 DropdownMenuItem(text = { Text(stringResource(R.string.readiness_title)) },
                     onClick = { menu = false; nav.navigate(Routes.READINESS) })
+                DropdownMenuItem(text = { Text(stringResource(R.string.google_login_menu)) },
+                    onClick = { menu = false; nav.navigate(Routes.GOOGLE_CONNECTIONS) })
                 DropdownMenuItem(text = { Text(stringResource(R.string.settings_title)) },
                     onClick = { menu = false; nav.navigate(Routes.SETTINGS) })
             }
