@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="proof_title">Add proof</string>
+    <string name="proof_how_title">How to add proof</string>
+    <string name="proof_how_body">In the Tuta app, open the confirmation mail the service sent to your new address. Export or share it as PDF and pick Aufmachen. Or choose the PDF file here.</string>
+    <string name="proof_pick_pdf">Choose a PDF</string>
+    <string name="proof_copy_failed">Could not read that file.</string>
+    <string name="proof_loading">Reading the PDF</string>
+    <string name="proof_err_unreadable">This file is not a readable PDF.</string>
+    <string name="proof_err_no_text">This PDF has no text layer. Aufmachen does not use OCR. Export the mail from the Tuta app again.</string>
+    <string name="proof_discard">Discard</string>
+    <string name="proof_not_tuta">This does not look like a Tuta export. You can still choose a service yourself.</string>
+
+    <string name="proof_fields_title">What Aufmachen read</string>
+    <string name="proof_field_name">Sender name</string>
+    <string name="proof_field_to">To</string>
+    <string name="proof_field_date">Date</string>
+    <string name="proof_field_reply_to">Reply to</string>
+    <string name="proof_field_links">Links</string>
+    <string name="proof_none">none</string>
+
+    <string name="proof_not_new_title">Not a new address</string>
+    <string name="proof_not_new_body">This mail did not go to one of your new addresses, so it would not prove anything.</string>
+    <string name="proof_use_anyway">Use anyway</string>
+    <string name="proof_address_differs">This mail went to %1$s, but the service uses %2$s.</string>
+    <string name="proof_address_differs_none">This mail went to %1$s. The service has no address set.</string>
+    <string name="proof_update_address">Update this service\'s address to %1$s</string>
+
+    <string name="proof_picker_title">Which service sent it?</string>
+    <string name="proof_top_matches">Best matches</string>
+    <string name="proof_no_matches">No likely match. Search all services.</string>
+    <string name="proof_search">Search services</string>
+    <string name="proof_search_all">All services</string>
+    <string name="proof_search_empty">No service found.</string>
+    <string name="proof_score">Match %1$d%%</string>
+    <string name="proof_no_services">No services yet. Scan your mailbox first.</string>
+
+    <string name="proof_confirm_title">Proof for %1$s?</string>
+    <string name="proof_confirm_body">Received at %1$s on %2$s</string>
+    <string name="proof_confirm_body_manual">Added by hand, without a Tuta export.</string>
+    <string name="proof_date_unknown">an unknown date</string>
+    <string name="proof_reasons">Why it matches</string>
+    <string name="proof_confirm">Confirm</string>
+    <string name="proof_pick_another">Pick another service</string>
+    <string name="proof_saving_failed">Could not save the proof.</string>
+    <string name="proof_timeline">Proof: mail from %1$s received at %2$s</string>
+    <string name="proof_timeline_manual">Proof: PDF added for %1$s</string>
+    <string name="proof_status_note">proof</string>
+
+    <string name="proof_google_title">Sign in with Google</string>
+    <string name="proof_google_step1_title">Step 1. Open your Google connections</string>
+    <string name="proof_google_step1_body">Open the page, select all text on it, copy it, and come back here.</string>
+    <string name="proof_google_open">Open Google connections</string>
+    <string name="proof_google_step2_title">Step 2. Paste what you copied</string>
+    <string name="proof_google_paste">Paste from clipboard</string>
+    <string name="proof_google_clipboard_empty">The clipboard is empty. Copy the page text first.</string>
+    <string name="proof_google_nothing_parsed">No app or site names found in that text. Check that you copied the whole page.</string>
+    <string name="proof_google_found">Found in your Google account</string>
+    <string name="proof_google_no_match">No match</string>
+    <string name="proof_google_pick_service">Pick a service</string>
+    <string name="proof_google_unmatched">Not in your service list</string>
+    <string name="proof_google_suggestions">Suggestions from your mail</string>
+    <string name="proof_google_suggestions_body">Google mails that mention third-party access to these services.</string>
+    <string name="proof_google_suggestions_empty">No suggestions in your stored mail.</string>
+    <string name="proof_google_suggestions_error">Could not read your stored mail.</string>
+    <string name="proof_google_confirm">Mark %1$d as Sign in with Google</string>
+    <string name="proof_google_done">Marked %1$d services.</string>
+    <string name="proof_google_note">Sign in with Google detected</string>
+</resources>
