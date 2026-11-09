@@ -45,7 +45,7 @@ object Watchdog {
         oldAddress: String?,
         isNewAddress: (String) -> Boolean,
         nowMillis: Long,
-    ): List<WatchdogFailure> = TODO("engine area")
+    ): List<WatchdogFailure> = watchdogFailures(services, newMail, oldAddress, isNewAddress, nowMillis)
 }
 
 // ---------------------------------------------------------------- unsubscribe method (engine area)
@@ -53,10 +53,10 @@ object Watchdog {
 enum class UnsubMethod { ONE_CLICK, EMAIL, WEB, NONE }
 
 /** Picks the method for a service: one-click POST > mailto > web link. Owner: engine area. */
-fun unsubMethod(links: List<String>, oneClick: Boolean): UnsubMethod = TODO("engine area")
+fun unsubMethod(links: List<String>, oneClick: Boolean): UnsubMethod = pickUnsubMethod(links, oneClick)
 
 /** Splits a raw List-Unsubscribe header into its URIs, in order. Owner: engine area. */
-fun unsubLinks(header: String): List<String> = TODO("engine area")
+fun unsubLinks(header: String): List<String> = parseUnsubLinks(header)
 
 // ---------------------------------------------------------------- Ask Claude (parsers area)
 

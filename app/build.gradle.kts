@@ -61,7 +61,7 @@ val generateParityFixture by tasks.registering(Exec::class) {
         parityDir.get().file("parity/fixture.json").asFile.path)
 }
 android.sourceSets.getByName("test").resources.srcDir(file("build/generated/parity"))
-tasks.matching { it.name.startsWith("process") && it.name.endsWith("UnitTestJavaRes") }
+tasks.matching { it.name.endsWith("UnitTestJavaRes") }
     .configureEach { dependsOn(generateParityFixture) }
 
 ksp {
