@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Home -->
+    <string name="home_empty_title">Nothing scanned yet</string>
+    <string name="home_empty_body">Services show up here once the first scan of the old mailbox finishes.</string>
+    <string name="home_sync_scanning">Scanning the old mailbox</string>
+    <string name="home_sync_progress">%1$d of %2$d messages</string>
+    <string name="home_sync_last">Last sync: %1$s</string>
+    <string name="home_sync_error">Last sync failed: %1$s</string>
+    <string name="home_sync_error_hint">Check your connection and the app password in Settings, then pull down to retry.</string>
+    <string name="home_failed_count">%1$d failed</string>
+    <string name="home_readiness_title">Ready to close Gmail: %1$d%%</string>
+    <string name="home_readiness_ready">Nothing left. Open the Close Gmail guide.</string>
+    <plurals name="home_next_up">
+        <item quantity="one">Next up, %d service in the queue</item>
+        <item quantity="other">Next up, %d services in the queue</item>
+    </plurals>
+    <string name="home_next_stats">%1$d mails, last seen %2$s, %3$d security, %4$d billing</string>
+    <string name="home_next_why">Why: %1$s</string>
+    <string name="home_next_address">New address: %1$s</string>
+    <string name="home_queue_done">Queue empty. Every service with an account has a status or is snoozed.</string>
+    <string name="home_action_ask">Ask Claude</string>
+    <string name="home_action_settings_page">Open settings page</string>
+    <string name="home_action_copy">Copy new address</string>
+    <string name="home_action_changed">Mark changed</string>
+    <string name="home_action_skip">Skip</string>
+    <string name="home_action_delete">Delete account instead</string>
+    <string name="home_action_ignore">Ignore</string>
+    <plurals name="home_alerts_open">
+        <item quantity="one">%d open alert</item>
+        <item quantity="other">%d open alerts</item>
+    </plurals>
+    <string name="home_alerts_hint">A service you moved is still mailing the old address.</string>
+    <string name="home_cancel">Cancel</string>
+
+    <!-- Migrate -->
+    <string name="home_migrate_search">Search domain or name</string>
+    <string name="home_migrate_clear">Clear search</string>
+    <string name="home_migrate_count">%1$d of %2$d services</string>
+    <string name="home_migrate_category">Category</string>
+    <string name="home_migrate_all_categories">All categories</string>
+    <string name="home_migrate_failed">Failed</string>
+    <string name="home_migrate_google">Google login</string>
+    <string name="home_migrate_steps">Has steps</string>
+    <string name="home_migrate_score">score %1$d</string>
+    <string name="home_migrate_row_stats">%1$d mails, last seen %2$s</string>
+    <string name="home_migrate_empty_title">No services yet</string>
+    <string name="home_migrate_empty_body">Services with an account appear after the first scan.</string>
+    <string name="home_migrate_nomatch_title">No matches</string>
+    <string name="home_migrate_nomatch_body">Try a different search or clear some filters.</string>
+
+    <!-- Readiness -->
+    <string name="home_blocker_critical">Verify %1$s</string>
+    <string name="home_blocker_alert">Resolve the alert from %1$s</string>
+    <string name="home_blocker_login">Switch the Google login of %1$s</string>
+    <string name="home_blocker_person">Tell %1$s about the new address</string>
+    <string name="home_blocker_takeout">Do a Google Takeout</string>
+    <string name="home_group_critical">Critical services verified</string>
+    <string name="home_group_alerts">Watchdog alerts from the last 60 days</string>
+    <string name="home_group_login">Google logins switched</string>
+    <string name="home_group_people">People told</string>
+    <string name="home_group_takeout">Takeout</string>
+    <string name="home_group_clear">Done</string>
+    <string name="home_group_left">%1$d left</string>
+    <string name="home_readiness_percent">%1$d%%</string>
+    <string name="home_readiness_summary">%1$d of %2$d items cleared</string>
+    <string name="home_login_switched">Login switched</string>
+    <string name="home_takeout_done">Takeout done</string>
+    <string name="home_takeout_open">Open Takeout</string>
+    <string name="home_close_button">Close Gmail guide</string>
+    <string name="home_close_locked">Unlocks at 100%. You can override it early.</string>
+    <string name="home_override_title">Open the guide early?</string>
+    <string name="home_override_body">%1$d blockers are still open. Closing Gmail with them open can lose mail or lock you out of accounts.</string>
+    <string name="home_override_confirm">Override and continue</string>
+
+    <!-- Close Gmail -->
+    <string name="home_close_title">Close Gmail</string>
+    <string name="home_close_intro">Work through these in order. Each tick is saved on this device.</string>
+    <string name="home_end_takeout">Takeout downloaded and verified</string>
+    <string name="home_end_takeout_body">Open the archive and spot-check a few mails and files before you trust it.</string>
+    <string name="home_end_payments">Payment methods removed</string>
+    <string name="home_end_payments_body">Remove saved cards and bank accounts from the Google account.</string>
+    <string name="home_end_payments_link">Open Google Pay</string>
+    <string name="home_end_play">Google Play and Android account</string>
+    <string name="home_end_play_body">Check purchases and subscriptions, the Google account on your phone, and Play Store sign-in. Deleting Gmail can cut them off.</string>
+    <string name="home_end_recovery">Recovery email and phone removed elsewhere</string>
+    <string name="home_end_recovery_body">Other services may still use the Gmail address as a recovery email. Change it before it stops working.</string>
+    <string name="home_end_delete">Delete the Gmail service</string>
+    <string name="home_end_delete_body">This removes the mailbox. The Google account itself can stay.</string>
+    <string name="home_end_delete_link">Open Google account settings</string>
+
+    <!-- Alerts -->
+    <string name="home_alerts_empty_title">No alerts</string>
+    <string name="home_alerts_empty_body">You will see a failure here when a moved service mails the old address again.</string>
+    <string name="home_alerts_none_open">No open alerts.</string>
+    <string name="home_alerts_dismissed">Dismissed (%1$d)</string>
+    <string name="home_alerts_sender">Mailed the old inbox from %1$s</string>
+    <string name="home_alerts_reason">Dismissed: %1$s</string>
+    <string name="home_alerts_open_service">Open service</string>
+    <string name="home_alerts_ask">Ask Claude</string>
+    <string name="home_alerts_dismiss">Dismiss</string>
+    <string name="home_dismiss_title">Dismiss this alert</string>
+    <string name="home_dismiss_added">Sender address added at the service</string>
+    <string name="home_dismiss_oneoff">Expected one-off</string>
+    <string name="home_dismiss_not_this">Not this service</string>
+    <string name="home_dismiss_other">Other</string>
+    <string name="home_dismiss_reason">Reason</string>
+</resources>
