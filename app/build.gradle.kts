@@ -52,6 +52,18 @@ android {
     }
 }
 
+// Scoring parity fixture: generated from the Python prototype (mail_triage.py) before unit tests.
+val parityDir = layout.buildDirectory.dir("generated/parity")
+val generateParityFixture by tasks.registering(Exec::class) {
+    inputs.files(rootProject.file("mail_triage.py"), rootProject.file("tools/make_parity_fixture.py"))
+    outputs.dir(parityDir)
+    commandLine("python3", "-I", rootProject.file("tools/make_parity_fixture.py").path,
+        parityDir.get().file("parity/fixture.json").asFile.path)
+}
+android.sourceSets.getByName("test").resources.srcDir(file("build/generated/parity"))
+tasks.matching { it.name.startsWith("process") && it.name.endsWith("UnitTestJavaRes") }
+    .configureEach { dependsOn(generateParityFixture) }
+
 ksp {
     arg("room.schemaLocation", "$projectDir/schemas")
 }
