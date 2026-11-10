@@ -6,7 +6,6 @@
     <string name="detail_none">geen</string>
     <string name="detail_not_found">Geen dienst gevonden voor %1$s. Scan opnieuw of ga terug.</string>
     <string name="detail_score">Score %1$d</string>
-    <string name="detail_status">Status</string>
     <string name="detail_domains">Domeinen</string>
     <string name="detail_domain_merged">%1$s (samengevoegd)</string>
     <string name="detail_unmerge">Splitsen</string>
@@ -52,15 +51,12 @@
     <string name="detail_new_address">Nieuw adres</string>
     <string name="detail_no_address">Nog geen adres. Stel je domein in via Instellingen of kies hier een adres.</string>
     <string name="detail_change">Wijzigen</string>
-    <string name="detail_address_custom">Eigen adres voor deze dienst. Tik op het adres om het te kopiëren.</string>
-    <string name="detail_address_bucket">Uit de bucket voor deze dienst. Tik op het adres om het te kopiëren.</string>
     <string name="detail_pick_bucket">Kies een bucket</string>
     <string name="detail_no_domain">Buckets hebben geen adressen tot je je domein instelt bij Instellingen.</string>
     <string name="detail_own_address">Geef deze dienst een eigen adres</string>
     <string name="detail_address_invalid">Vul een volledig adres in, zoals naam@example.com</string>
     <string name="detail_reset_bucket">Terug naar bucket</string>
 
-    <string name="detail_login">Login</string>
     <string name="detail_google_login">Inloggen met Google</string>
     <string name="detail_login_banner">Wijzig eerst de loginmethode (stel een wachtwoord of een andere login in) voordat Gmail wordt gesloten.</string>
     <string name="detail_login_switched">Login gewijzigd</string>
@@ -74,8 +70,6 @@
     <string name="detail_pdf_missing">Het pdf-bestand is niet beschikbaar</string>
     <string name="detail_pdf_failed">Die pdf kon niet worden gekopieerd</string>
 
-    <string name="detail_steps">Stappen</string>
-    <string name="detail_steps_empty">Nog geen stappen. Gebruik Vraag Claude en plak daarna het antwoord.</string>
     <plurals name="detail_steps_progress">
         <item quantity="one">%1$d van %2$d stap gedaan</item>
         <item quantity="other">%1$d van %2$d stappen gedaan</item>
@@ -86,8 +80,6 @@
     <string name="detail_privacy_contact">Privacycontact: %1$s</string>
     <string name="detail_notes">Notities van Claude</string>
 
-    <string name="detail_actions">Acties</string>
-    <string name="detail_add_proof_hint">Je kunt ook een pdf rechtstreeks vanuit de Tuta-app naar Aufmachen delen.</string>
     <string name="detail_act_ask_migrate">Vraag Claude (verhuizen)</string>
     <string name="detail_act_ask_delete">Vraag Claude (verwijderen)</string>
     <string name="detail_act_paste">Plak het antwoord van Claude</string>
@@ -101,10 +93,6 @@
     <string name="detail_act_merge">Samenvoegen met…</string>
     <string name="detail_act_gmail">Openen in Gmail</string>
 
-    <string name="detail_ask_title">Vraag Claude</string>
-    <string name="detail_ask_ok">Kopiëren en Claude openen</string>
-    <string name="detail_ask_migrate_text">Kopieert een prompt over %1$s naar het klembord en opent Claude. De prompt bevat de naam van de dienst, de domeinen, de categorie en een paar ja/nee-feiten. Er staan geen adressen of onderwerpen in.</string>
-    <string name="detail_ask_delete_text">Kopieert een prompt over het verwijderen van je account bij %1$s naar het klembord en opent Claude. De prompt bevat de naam van de dienst, de domeinen, de categorie en een paar ja/nee-feiten. Er staan geen adressen of onderwerpen in.</string>
     <string name="detail_clipboard_empty">Het klembord is leeg</string>
     <string name="detail_changed_title">Markeren als gewijzigd?</string>
     <string name="detail_changed_text">%1$s gaat naar Gewijzigd (niet geverifieerd). Vanaf nu geeft elke mail van deze dienst naar de oude mailbox een watchdog-melding. Er wordt niets verstuurd.</string>
@@ -118,9 +106,6 @@
     <string name="detail_reset_title">Terug naar Te doen?</string>
     <string name="detail_reset_text">%1$s gaat terug naar Te doen, en een openstaande watchdog-melding wordt gewist. Er wordt niets verstuurd.</string>
     <string name="detail_reset_ok">Terugzetten</string>
-    <string name="detail_gmail_title">Openen in Gmail?</string>
-    <string name="detail_gmail_text">Opent in je browser een Gmail-webzoekopdracht naar mail van %1$s. Je logt daar in zoals gewoonlijk.</string>
-    <string name="detail_gmail_ok">Openen</string>
 
     <string name="detail_merge_pick">Samenvoegen met…</string>
     <string name="detail_search">Diensten zoeken</string>
@@ -165,4 +150,36 @@
     <string name="detail_gdpr_failed">Verzenden mislukt: %1$s. Je tekst blijft bewaard.</string>
     <string name="detail_gdpr_unknown_error">onbekende fout</string>
     <string name="detail_gdpr_sent_note">Verwijderingsverzoek verstuurd naar %1$s</string>
+
+    <string name="detail_next_ask">Vraag Claude</string>
+    <string name="detail_next_ask_again">Vraag Claude opnieuw</string>
+    <string name="detail_done_line">%1$s op %2$s</string>
+    <string name="detail_copy">Adres kopiëren</string>
+    <string name="detail_expand">Uitklappen</string>
+    <string name="detail_collapse">Inklappen</string>
+    <string name="detail_about">Over</string>
+    <string name="detail_display_names">Weergavenamen</string>
+    <string name="detail_show_all">Alles tonen</string>
+    <string name="detail_show_fewer">Minder tonen</string>
+    <string name="detail_privacy_short">privacycontact</string>
+    <string name="detail_notes_saved">Bewaarde notities</string>
+    <string name="detail_stats_summary">%1$s, laatst gezien %2$s</string>
+    <string name="detail_moved">Verplaatst naar %1$s</string>
+    <string name="detail_moved_auto">Teruggezet naar het automatische tabblad</string>
+    <plurals name="detail_mails_count">
+        <item quantity="one">%1$d mail</item>
+        <item quantity="other">%1$d mails</item>
+    </plurals>
+    <plurals name="detail_days_ago">
+        <item quantity="one">%1$d dag geleden</item>
+        <item quantity="other">%1$d dagen geleden</item>
+    </plurals>
+    <plurals name="detail_domains_count">
+        <item quantity="one">%1$d domein</item>
+        <item quantity="other">%1$d domeinen</item>
+    </plurals>
+    <plurals name="detail_senders_count">
+        <item quantity="one">%1$d afzenderadres</item>
+        <item quantity="other">%1$d afzenderadressen</item>
+    </plurals>
 </resources>
