@@ -17,11 +17,18 @@ internal object GoogleConn {
         "details bekijken", "terug", "zoeken", "google-account", "startpagina", "persoonlijke gegevens",
         "gegevens en privacy", "beveiliging", "personen en delen", "betalingen en abonnementen",
         "over", "privacybeleid", "gebruiksvoorwaarden", "feedback", "help", "verbinding verwijderen",
+        // "Linked apps" layout (2026).
+        "linked apps", "manage data sharing", "review your linked apps", "learn about linked apps",
+        "search linked apps by name", "view by", "done", "privacytermshelpabout", "close", "menu", "more",
+        "gekoppelde apps", "gegevensdeling beheren", "je gekoppelde apps bekijken", "uw gekoppelde apps bekijken",
+        "meer informatie over gekoppelde apps", "gekoppelde apps zoeken op naam", "weergeven op", "bekijken op",
+        "klaar", "gereed", "privacyvoorwaardenhulpover", "sluiten", "meer",
     )
     private val chromePrefixes = listOf(
         "since ", "sinds ", "has access", "has some", "heeft toegang", "heeft beperkte", "signed in with",
         "ingelogd met", "your connections", "uw verbindingen", "je verbindingen", "third-party", "third party",
         "showing ", "toont ", "last used", "laatst gebruikt", "access to ", "toegang tot ",
+        "see the data", "bekijk de gegevens", "learn about ", "search linked", "zoek gekoppelde",
     )
     private val dateOnly = Regex(
         "^(?:\\d{1,2}\\s+\\p{L}{3,9}\\.?\\s+\\d{4}|\\p{L}{3,9}\\.?\\s+\\d{1,2},?\\s+\\d{4})$",
@@ -59,19 +66,23 @@ internal object GoogleConn {
         // Prepare every candidate name once; the old per-pair normalisation froze the UI on big pastes.
         val prepared = candidates.map { c -> c.groupKey to ParserText.candidateNames(c).map(ParserText::prepare) }
         return names.mapNotNull { n ->
-            val pn = ParserText.prepare(n)
+            // Store names often carry a tagline: "Coinbase: Buy Crypto & Stocks", "Lime - #RideGreen".
+            val pns = listOf(n, brandPart(n)).distinct().map(ParserText::prepare)
             var best: NameMatch? = null
             for ((key, cn) in prepared) {
                 var s = 0.0
-                for (p in cn) {
+                for (p in cn) for (pn in pns) {
                     s = maxOf(s, ParserText.nameSimilarityAtLeast(pn, p, maxOf(THRESHOLD, best?.score ?: 0.0)))
-                    if (s >= 1.0) break
                 }
                 if (s >= THRESHOLD && (best == null || s > best.score)) best = NameMatch(n, key, s)
             }
             best
         }
     }
+
+    private val tagline = Regex("\\s*(?::|\\s[-–—|]\\s).*$")
+
+    private fun brandPart(name: String): String = tagline.replace(name, "").trim().ifEmpty { name }
 
     fun isThirdPartyAccessHint(fromAddr: String, subject: String): Boolean {
         val host = fromAddr.substringAfterLast('@').lowercase().trim().trimEnd('>')

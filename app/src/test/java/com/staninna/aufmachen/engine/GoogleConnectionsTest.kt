@@ -82,4 +82,53 @@ class GoogleConnectionsTest {
             if (slow >= 0.82) assertEquals(slow, fast, 1e-9) else assertTrue(fast < 0.82)
         }
     }
+
+    @Test fun parsesTheLinkedAppsPage() {
+        val page = """
+            Linked apps
+            Manage data sharing
+            Review your linked apps
+            See the data that you're sharing with your linked apps
+
+            Learn about linked apps
+
+            search
+            Search linked apps by name
+            View by:
+
+            done
+
+
+
+            1001sms.com
+
+            Coinbase: Buy Crypto & Stocks
+
+            GitHub
+
+            Lime - #RideGreen
+
+            Splitser - WieBetaaltWat
+
+            PrivacyTermsHelpAbout
+        """.trimIndent()
+        val names = GoogleConnections.parse(page)
+        assertEquals(
+            listOf("1001sms.com", "Coinbase: Buy Crypto & Stocks", "GitHub", "Lime - #RideGreen", "Splitser - WieBetaaltWat"),
+            names,
+        )
+        val c = listOf(
+            ProofCandidate("coinbase.com", setOf("coinbase.com"), listOf("Coinbase")),
+            ProofCandidate("li.me", setOf("li.me"), listOf("Lime")),
+            ProofCandidate("github.com", setOf("github.com"), listOf("GitHub")),
+            ProofCandidate("1001sms.com", setOf("1001sms.com"), emptyList()),
+            ProofCandidate("splitser.com", setOf("splitser.com"), listOf("Splitser")),
+        )
+        val m = GoogleConnections.match(names, c).associate { it.name to it.groupKey }
+        assertEquals("coinbase.com", m["Coinbase: Buy Crypto & Stocks"])
+        assertEquals("li.me", m["Lime - #RideGreen"])
+        assertEquals("github.com", m["GitHub"])
+        assertEquals("1001sms.com", m["1001sms.com"])
+        assertEquals("splitser.com", m["Splitser - WieBetaaltWat"])
+    }
 }
