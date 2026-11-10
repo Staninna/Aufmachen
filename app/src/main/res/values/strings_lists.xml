@@ -121,4 +121,15 @@
 
     <!-- Delete -->
     <string name="lists_delete_empty">Nothing here yet. Use Move to… on any row in Migrate, Unsubscribe, Dormant or People to put accounts you want gone in this list.</string>
+    <string name="lists_confirm_go_gdpr">Confirm: unsubscribe %1$d, request deletion %2$d</string>
+    <string name="lists_gdpr_all">Also request deletion (GDPR)</string>
+    <string name="lists_gdpr_all_hint">Sends an Article 17 erasure request from %1$s to each service.</string>
+    <string name="lists_gdpr_no_imap">GDPR deletion requests need the old account mail settings.</string>
+    <string name="lists_gdpr_item">Send a GDPR deletion request</string>
+    <string name="lists_gdpr_to">Send to</string>
+    <string name="lists_gdpr_to_line">Deletion request to %1$s</string>
+    <string name="lists_gdpr_guessed">Guessed address. Check the service\'s privacy policy if you can.</string>
+    <string name="lists_gdpr_bad_address">Enter an email address.</string>
+    <string name="lists_gdpr_sent">Deletion request sent</string>
+    <string name="lists_gdpr_summary">Deletion requests sent: %1$d.</string>
 </resources>

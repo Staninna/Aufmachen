@@ -12,12 +12,15 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -27,6 +30,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -44,7 +49,10 @@ fun UnsubscribeConfirmScreen(nav: NavHostController) {
     val from by vm.oldAddress.collectAsState()
 
     val runnable = items.count { it.plan != null }
-    val failed = items.count { it.state == ItemState.FAILED }
+    val gdprCount = items.count { it.gdprReady && it.gdprState != ItemState.DONE }
+    val failed = items.count { it.state == ItemState.FAILED || it.gdprState == ItemState.FAILED }
+    val canMail = from.isNotBlank()
+    val editable = phase == ConfirmPhase.REVIEW
 
     Scaffold(
         topBar = { BackTopBar(stringResource(R.string.lists_confirm_title), nav) },
@@ -53,8 +61,14 @@ fun UnsubscribeConfirmScreen(nav: NavHostController) {
                 Column(Modifier.fillMaxWidth().padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     when (phase) {
                         ConfirmPhase.REVIEW -> Button(
-                            onClick = vm::confirm, enabled = loaded && runnable > 0, modifier = Modifier.fillMaxWidth(),
-                        ) { Text(stringResource(R.string.lists_confirm_go, runnable)) }
+                            onClick = vm::confirm, enabled = loaded && (runnable > 0 || gdprCount > 0),
+                            modifier = Modifier.fillMaxWidth(),
+                        ) {
+                            Text(
+                                if (gdprCount > 0) stringResource(R.string.lists_confirm_go_gdpr, runnable, gdprCount)
+                                else stringResource(R.string.lists_confirm_go, runnable),
+                            )
+                        }
                         ConfirmPhase.RUNNING -> Row(verticalAlignment = Alignment.CenterVertically) {
                             CircularProgressIndicator(Modifier.size(20.dp), strokeWidth = 2.dp)
                             Text(stringResource(R.string.lists_confirm_running), Modifier.padding(start = 12.dp))
@@ -106,7 +120,20 @@ fun UnsubscribeConfirmScreen(nav: NavHostController) {
                         if (from.isBlank() && items.any { it.plan?.fellBack == true || it.plan == null }) {
                             Text(stringResource(R.string.lists_confirm_no_imap), style = MaterialTheme.typography.bodySmall)
                         }
+                        if (canMail && editable) {
+                            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                                Column(Modifier.weight(1f)) {
+                                    Text(stringResource(R.string.lists_gdpr_all), style = MaterialTheme.typography.bodyMedium)
+                                    Text(stringResource(R.string.lists_gdpr_all_hint, from), style = MaterialTheme.typography.bodySmall)
+                                }
+                                Switch(checked = items.isNotEmpty() && items.all { it.gdpr }, onCheckedChange = vm::setGdprAll)
+                            }
+                        } else if (!canMail) {
+                            Text(stringResource(R.string.lists_gdpr_no_imap), style = MaterialTheme.typography.bodySmall)
+                        }
                         if (phase == ConfirmPhase.DONE) {
+                            val sent = items.count { it.gdprState == ItemState.DONE }
+                            if (sent > 0) Text(stringResource(R.string.lists_gdpr_summary, sent))
                             Text(stringResource(R.string.lists_confirm_summary,
                                 items.count { it.state == ItemState.DONE }, failed,
                                 items.count { it.state == ItemState.SKIPPED }))
@@ -126,6 +153,7 @@ fun UnsubscribeConfirmScreen(nav: NavHostController) {
                         ItemState.FAILED -> Text(stringResource(R.string.lists_state_failed, it.message.orEmpty()), color = MaterialTheme.colorScheme.error)
                         ItemState.SKIPPED -> Text(stringResource(R.string.lists_state_skipped, it.message.orEmpty()))
                     }
+                    if (canMail) GdprRow(it, editable, vm)
                 }
                 HorizontalDivider()
             }
@@ -142,4 +170,38 @@ private fun describe(item: ConfirmItem, from: String): String {
         UnsubStep.WEB -> stringResource(R.string.lists_will_web, hostOf(p.link))
     }
     return if (p.fellBack) base + " " + stringResource(R.string.lists_will_fallback) else base
+}
+
+@Composable
+private fun GdprRow(item: ConfirmItem, editable: Boolean, vm: UnsubscribeConfirmViewModel) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        Checkbox(item.gdpr, { on -> vm.setGdpr(item.domain, on) }, enabled = editable)
+        Text(stringResource(R.string.lists_gdpr_item), style = MaterialTheme.typography.bodyMedium)
+    }
+    if (!item.gdpr) return
+    if (editable) {
+        OutlinedTextField(
+            value = item.gdprTo,
+            onValueChange = { vm.setGdprTo(item.domain, it) },
+            label = { Text(stringResource(R.string.lists_gdpr_to)) },
+            singleLine = true,
+            isError = !item.gdprReady,
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+            supportingText = {
+                when {
+                    !item.gdprReady -> Text(stringResource(R.string.lists_gdpr_bad_address))
+                    item.gdprGuessed -> Text(stringResource(R.string.lists_gdpr_guessed))
+                }
+            },
+            modifier = Modifier.fillMaxWidth(),
+        )
+    } else {
+        Text(stringResource(R.string.lists_gdpr_to_line, item.gdprTo.trim()), style = MaterialTheme.typography.bodySmall)
+    }
+    when (item.gdprState) {
+        ItemState.RUNNING -> Text(stringResource(R.string.lists_state_running), color = MaterialTheme.colorScheme.primary)
+        ItemState.DONE -> Text(stringResource(R.string.lists_gdpr_sent), color = MaterialTheme.colorScheme.primary)
+        ItemState.FAILED -> Text(stringResource(R.string.lists_state_failed, item.gdprMessage.orEmpty()), color = MaterialTheme.colorScheme.error)
+        else -> Unit
+    }
 }
