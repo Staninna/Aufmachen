@@ -4,8 +4,6 @@
     <string name="lists_select_all">Alles selecteren</string>
     <string name="lists_selected_count">%1$d geselecteerd</string>
     <string name="lists_row_menu">Rijmenu</string>
-    <string name="lists_yes">ja</string>
-    <string name="lists_no">nee</string>
 
     <!-- Unsubscribe list -->
     <string name="lists_show_done">Afgeronde tonen</string>
@@ -13,7 +11,6 @@
     <string name="lists_unsub_empty">Geen nieuwsbriefafzenders meer om je voor af te melden.</string>
     <string name="lists_unsub_row_stats">%1$d mails in 12 maanden, %2$d%% gelezen, laatst gezien %3$s</string>
     <string name="lists_open_gmail">Openen in Gmail</string>
-    <string name="lists_done_mark">Klaar</string>
     <string name="lists_method_oneclick">Met één klik</string>
     <string name="lists_method_email">E-mail</string>
     <string name="lists_method_web">Web</string>
@@ -75,7 +72,6 @@
     <string name="lists_tell_no">nee</string>
     <string name="lists_people_not_told">nog niet verteld</string>
     <string name="lists_people_empty">Geen mensen om te tonen.</string>
-    <string name="lists_people_row">Jij stuurde %1$d, zij stuurden %2$d, heen en terug %3$s, laatste contact %4$s</string>
     <string name="lists_people_told">Verteld</string>
     <string name="lists_people_compose">Opstellen: ik ben verhuisd</string>
     <string name="lists_people_mark_told">Markeer als verteld</string>
@@ -102,4 +98,27 @@
     <string name="lists_moved_finished">Klaar. De mensen naar wie je hebt gestuurd, zijn als verteld gemarkeerd.</string>
     <string name="lists_moved_chooser">Versturen met</string>
     <string name="lists_moved_no_mail_app">Geen mailapp gevonden</string>
+
+    <!-- Verplaatsen en filters -->
+    <string name="lists_moved_snack">%1$d verplaatst naar %2$s</string>
+    <string name="lists_moved_snack_auto">%1$d teruggezet naar het automatische tabblad</string>
+    <string name="lists_undo">Ongedaan maken</string>
+    <string name="lists_also_title">Deze accounts ook naar %1$s verplaatsen?</string>
+    <string name="lists_also_move">Verplaatsen</string>
+    <string name="lists_filters">Filters</string>
+    <string name="lists_filters_clear">Filters wissen</string>
+    <string name="lists_filters_tier">Niveau</string>
+    <string name="lists_filters_status">Status</string>
+    <string name="lists_filters_category">Categorie</string>
+    <string name="lists_filters_other">Overig</string>
+    <string name="lists_last_seen">laatst gezien %1$s</string>
+    <string name="lists_people_moved_here">Hierheen verplaatst</string>
+    <string name="lists_people_last_contact">laatste contact %1$s</string>
+    <plurals name="lists_people_addresses">
+        <item quantity="one">%1$d adres</item>
+        <item quantity="other">%1$d adressen</item>
+    </plurals>
+
+    <!-- Delete -->
+    <string name="lists_delete_empty">Hier staat nog niets. Gebruik Verplaatsen naar… op een rij in Verhuizen, Afmelden, Slapend of Mensen om accounts die weg moeten in deze lijst te zetten.</string>
 </resources>

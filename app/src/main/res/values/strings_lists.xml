@@ -4,8 +4,6 @@
     <string name="lists_select_all">Select all</string>
     <string name="lists_selected_count">%1$d selected</string>
     <string name="lists_row_menu">Row menu</string>
-    <string name="lists_yes">yes</string>
-    <string name="lists_no">no</string>
 
     <!-- Unsubscribe list -->
     <string name="lists_show_done">Show done</string>
@@ -13,7 +11,6 @@
     <string name="lists_unsub_empty">No newsletter senders left to unsubscribe from.</string>
     <string name="lists_unsub_row_stats">%1$d mails in 12 months, %2$d%% read, last seen %3$s</string>
     <string name="lists_open_gmail">Open in Gmail</string>
-    <string name="lists_done_mark">Done</string>
     <string name="lists_method_oneclick">One-click</string>
     <string name="lists_method_email">Email</string>
     <string name="lists_method_web">Web</string>
@@ -75,7 +72,6 @@
     <string name="lists_tell_no">no</string>
     <string name="lists_people_not_told">not told yet</string>
     <string name="lists_people_empty">No people to show.</string>
-    <string name="lists_people_row">You sent %1$d, they sent %2$d, two-way %3$s, last contact %4$s</string>
     <string name="lists_people_told">Told</string>
     <string name="lists_people_compose">Compose I\'ve moved</string>
     <string name="lists_people_mark_told">Mark told</string>
@@ -102,4 +98,27 @@
     <string name="lists_moved_finished">Done. The people you sent to are marked as told.</string>
     <string name="lists_moved_chooser">Send with</string>
     <string name="lists_moved_no_mail_app">No mail app found</string>
+
+    <!-- Move and filters -->
+    <string name="lists_moved_snack">Moved %1$d to %2$s</string>
+    <string name="lists_moved_snack_auto">Moved %1$d back to the automatic tab</string>
+    <string name="lists_undo">Undo</string>
+    <string name="lists_also_title">Also move these accounts to %1$s?</string>
+    <string name="lists_also_move">Move</string>
+    <string name="lists_filters">Filters</string>
+    <string name="lists_filters_clear">Clear filters</string>
+    <string name="lists_filters_tier">Tier</string>
+    <string name="lists_filters_status">Status</string>
+    <string name="lists_filters_category">Category</string>
+    <string name="lists_filters_other">Other</string>
+    <string name="lists_last_seen">last seen %1$s</string>
+    <string name="lists_people_moved_here">Moved here</string>
+    <string name="lists_people_last_contact">last contact %1$s</string>
+    <plurals name="lists_people_addresses">
+        <item quantity="one">%1$d address</item>
+        <item quantity="other">%1$d addresses</item>
+    </plurals>
+
+    <!-- Delete -->
+    <string name="lists_delete_empty">Nothing here yet. Use Move to… on any row in Migrate, Unsubscribe, Dormant or People to put accounts you want gone in this list.</string>
 </resources>

@@ -6,6 +6,7 @@ import com.staninna.aufmachen.AppContainer
 import com.staninna.aufmachen.data.AlertEntity
 import com.staninna.aufmachen.data.ServiceView
 import com.staninna.aufmachen.data.SyncStateEntity
+import com.staninna.aufmachen.model.Placement
 import com.staninna.aufmachen.model.Status
 import com.staninna.aufmachen.model.Tier
 import com.staninna.aufmachen.ui.readiness.Readiness
@@ -36,7 +37,7 @@ data class HomeUi(
 
 /** Failed services first (they need attention), then open services by score. Snoozed ones wait. */
 internal fun buildHomeUi(all: List<ServiceView>): HomeUi {
-    val withAccount = all.filter { it.stats.hasAccount }
+    val withAccount = all.filter { it.inTab(Placement.MIGRATE) }
     val slices = Tier.entries.map { t ->
         val inTier = withAccount.filter { it.tier == t }
         TierSlice(t, inTier.count { it.status != Status.TODO }, inTier.count { it.status == Status.TODO })

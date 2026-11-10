@@ -1,0 +1,959 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 2,
+    "identityHash": "37be5f6918f876573459d1b0ba65a41c",
+    "entities": [
+      {
+        "tableName": "headers",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `source` TEXT NOT NULL, `uid` INTEGER NOT NULL, `dateEpochDay` INTEGER, `fromAddr` TEXT NOT NULL, `fromName` TEXT NOT NULL, `fromDomain` TEXT NOT NULL, `toAddrs` TEXT NOT NULL, `subject` TEXT NOT NULL, `unsubHeader` TEXT NOT NULL, `unsubOneClick` INTEGER NOT NULL, `bulk` INTEGER NOT NULL, `attach` INTEGER NOT NULL, `seen` INTEGER NOT NULL, `flagged` INTEGER NOT NULL, `important` INTEGER NOT NULL, `sent` INTEGER NOT NULL, `category` TEXT NOT NULL, `syncedAt` INTEGER NOT NULL, `initialScan` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "source",
+            "columnName": "source",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "uid",
+            "columnName": "uid",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dateEpochDay",
+            "columnName": "dateEpochDay",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "fromAddr",
+            "columnName": "fromAddr",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "fromName",
+            "columnName": "fromName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "fromDomain",
+            "columnName": "fromDomain",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "toAddrs",
+            "columnName": "toAddrs",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "subject",
+            "columnName": "subject",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "unsubHeader",
+            "columnName": "unsubHeader",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "unsubOneClick",
+            "columnName": "unsubOneClick",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "bulk",
+            "columnName": "bulk",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "attach",
+            "columnName": "attach",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "seen",
+            "columnName": "seen",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "flagged",
+            "columnName": "flagged",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "important",
+            "columnName": "important",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "sent",
+            "columnName": "sent",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "category",
+            "columnName": "category",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "syncedAt",
+            "columnName": "syncedAt",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "initialScan",
+            "columnName": "initialScan",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_headers_source_uid",
+            "unique": true,
+            "columnNames": [
+              "source",
+              "uid"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_headers_source_uid` ON `${TABLE_NAME}` (`source`, `uid`)"
+          },
+          {
+            "name": "index_headers_fromDomain",
+            "unique": false,
+            "columnNames": [
+              "fromDomain"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_headers_fromDomain` ON `${TABLE_NAME}` (`fromDomain`)"
+          },
+          {
+            "name": "index_headers_syncedAt",
+            "unique": false,
+            "columnNames": [
+              "syncedAt"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_headers_syncedAt` ON `${TABLE_NAME}` (`syncedAt`)"
+          }
+        ]
+      },
+      {
+        "tableName": "service_stats",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`domain` TEXT NOT NULL, `domainsJson` TEXT NOT NULL, `displayNamesJson` TEXT NOT NULL, `senderAddrsJson` TEXT NOT NULL, `category` TEXT NOT NULL, `score` INTEGER NOT NULL, `tier` INTEGER NOT NULL, `whyJson` TEXT NOT NULL, `componentsJson` TEXT NOT NULL, `action` TEXT NOT NULL, `mails` INTEGER NOT NULL, `last12` INTEGER NOT NULL, `perYearJson` TEXT NOT NULL, `perYearRate` REAL NOT NULL, `firstEpochDay` INTEGER, `lastEpochDay` INTEGER, `daysSince` INTEGER, `activeYears` INTEGER NOT NULL, `readPct` REAL NOT NULL, `importantPct` REAL NOT NULL, `starred` INTEGER NOT NULL, `youSent` INTEGER NOT NULL, `security` INTEGER NOT NULL, `welcome` INTEGER NOT NULL, `orders` INTEGER NOT NULL, `billing` INTEGER NOT NULL, `marketing` INTEGER NOT NULL, `billMonths` INTEGER NOT NULL, `regularity` REAL, `newsletterPct` REAL NOT NULL, `promoPct` REAL NOT NULL, `updatesPct` REAL NOT NULL, `socialPct` REAL NOT NULL, `attachments` INTEGER NOT NULL, `unsubLinksJson` TEXT NOT NULL, `unsubOneClick` INTEGER NOT NULL, `exampleSubject` TEXT NOT NULL, `hasAccount` INTEGER NOT NULL, `dormant` INTEGER NOT NULL, `newsletterLike` INTEGER NOT NULL, PRIMARY KEY(`domain`))",
+        "fields": [
+          {
+            "fieldPath": "domain",
+            "columnName": "domain",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "domainsJson",
+            "columnName": "domainsJson",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "displayNamesJson",
+            "columnName": "displayNamesJson",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "senderAddrsJson",
+            "columnName": "senderAddrsJson",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "category",
+            "columnName": "category",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "score",
+            "columnName": "score",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "tier",
+            "columnName": "tier",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "whyJson",
+            "columnName": "whyJson",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "componentsJson",
+            "columnName": "componentsJson",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "action",
+            "columnName": "action",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mails",
+            "columnName": "mails",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "last12",
+            "columnName": "last12",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "perYearJson",
+            "columnName": "perYearJson",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "perYearRate",
+            "columnName": "perYearRate",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "firstEpochDay",
+            "columnName": "firstEpochDay",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "lastEpochDay",
+            "columnName": "lastEpochDay",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "daysSince",
+            "columnName": "daysSince",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "activeYears",
+            "columnName": "activeYears",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "readPct",
+            "columnName": "readPct",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "importantPct",
+            "columnName": "importantPct",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "starred",
+            "columnName": "starred",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "youSent",
+            "columnName": "youSent",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "security",
+            "columnName": "security",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "welcome",
+            "columnName": "welcome",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "orders",
+            "columnName": "orders",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "billing",
+            "columnName": "billing",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "marketing",
+            "columnName": "marketing",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "billMonths",
+            "columnName": "billMonths",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "regularity",
+            "columnName": "regularity",
+            "affinity": "REAL"
+          },
+          {
+            "fieldPath": "newsletterPct",
+            "columnName": "newsletterPct",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "promoPct",
+            "columnName": "promoPct",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "updatesPct",
+            "columnName": "updatesPct",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "socialPct",
+            "columnName": "socialPct",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "attachments",
+            "columnName": "attachments",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "unsubLinksJson",
+            "columnName": "unsubLinksJson",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "unsubOneClick",
+            "columnName": "unsubOneClick",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "exampleSubject",
+            "columnName": "exampleSubject",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "hasAccount",
+            "columnName": "hasAccount",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dormant",
+            "columnName": "dormant",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "newsletterLike",
+            "columnName": "newsletterLike",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "domain"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_service_stats_score",
+            "unique": false,
+            "columnNames": [
+              "score"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_service_stats_score` ON `${TABLE_NAME}` (`score`)"
+          },
+          {
+            "name": "index_service_stats_tier",
+            "unique": false,
+            "columnNames": [
+              "tier"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_service_stats_tier` ON `${TABLE_NAME}` (`tier`)"
+          }
+        ]
+      },
+      {
+        "tableName": "service_state",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`domain` TEXT NOT NULL, `status` TEXT NOT NULL, `statusChangedAt` INTEGER, `failed` INTEGER NOT NULL, `pinnedTier` INTEGER, `assignedAddress` TEXT, `googleLogin` INTEGER NOT NULL, `loginSwitched` INTEGER NOT NULL, `snoozedUntil` INTEGER, `settingsUrl` TEXT, `privacyContact` TEXT, `stepsJson` TEXT NOT NULL, `stepsDoneJson` TEXT NOT NULL, `gotchasJson` TEXT NOT NULL, `claudeNotes` TEXT, `unsubscribedAt` INTEGER, `unsubMethod` TEXT, `placement` TEXT, PRIMARY KEY(`domain`))",
+        "fields": [
+          {
+            "fieldPath": "domain",
+            "columnName": "domain",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "status",
+            "columnName": "status",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "statusChangedAt",
+            "columnName": "statusChangedAt",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "failed",
+            "columnName": "failed",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "pinnedTier",
+            "columnName": "pinnedTier",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "assignedAddress",
+            "columnName": "assignedAddress",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "googleLogin",
+            "columnName": "googleLogin",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "loginSwitched",
+            "columnName": "loginSwitched",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "snoozedUntil",
+            "columnName": "snoozedUntil",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "settingsUrl",
+            "columnName": "settingsUrl",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "privacyContact",
+            "columnName": "privacyContact",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "stepsJson",
+            "columnName": "stepsJson",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "stepsDoneJson",
+            "columnName": "stepsDoneJson",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "gotchasJson",
+            "columnName": "gotchasJson",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "claudeNotes",
+            "columnName": "claudeNotes",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "unsubscribedAt",
+            "columnName": "unsubscribedAt",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "unsubMethod",
+            "columnName": "unsubMethod",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "placement",
+            "columnName": "placement",
+            "affinity": "TEXT"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "domain"
+          ]
+        }
+      },
+      {
+        "tableName": "merges",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`domain` TEXT NOT NULL, `intoDomain` TEXT NOT NULL, PRIMARY KEY(`domain`))",
+        "fields": [
+          {
+            "fieldPath": "domain",
+            "columnName": "domain",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "intoDomain",
+            "columnName": "intoDomain",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "domain"
+          ]
+        }
+      },
+      {
+        "tableName": "timeline",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `domain` TEXT NOT NULL, `at` INTEGER NOT NULL, `kind` TEXT NOT NULL, `text` TEXT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "domain",
+            "columnName": "domain",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "at",
+            "columnName": "at",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "kind",
+            "columnName": "kind",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "text",
+            "columnName": "text",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_timeline_domain",
+            "unique": false,
+            "columnNames": [
+              "domain"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_timeline_domain` ON `${TABLE_NAME}` (`domain`)"
+          }
+        ]
+      },
+      {
+        "tableName": "proofs",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `domain` TEXT NOT NULL, `receivedDate` TEXT, `recipient` TEXT NOT NULL, `displayName` TEXT NOT NULL, `replyTo` TEXT, `title` TEXT NOT NULL, `pdfPath` TEXT NOT NULL, `linksJson` TEXT NOT NULL, `createdAt` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "domain",
+            "columnName": "domain",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "receivedDate",
+            "columnName": "receivedDate",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "recipient",
+            "columnName": "recipient",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "displayName",
+            "columnName": "displayName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "replyTo",
+            "columnName": "replyTo",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "title",
+            "columnName": "title",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "pdfPath",
+            "columnName": "pdfPath",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "linksJson",
+            "columnName": "linksJson",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "createdAt",
+            "columnName": "createdAt",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_proofs_domain",
+            "unique": false,
+            "columnNames": [
+              "domain"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_proofs_domain` ON `${TABLE_NAME}` (`domain`)"
+          }
+        ]
+      },
+      {
+        "tableName": "alerts",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `domain` TEXT NOT NULL, `headerId` INTEGER NOT NULL, `dateEpochDay` INTEGER, `senderAddr` TEXT NOT NULL, `subject` TEXT NOT NULL, `createdAt` INTEGER NOT NULL, `dismissed` INTEGER NOT NULL, `dismissReason` TEXT)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "domain",
+            "columnName": "domain",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "headerId",
+            "columnName": "headerId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dateEpochDay",
+            "columnName": "dateEpochDay",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "senderAddr",
+            "columnName": "senderAddr",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "subject",
+            "columnName": "subject",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "createdAt",
+            "columnName": "createdAt",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dismissed",
+            "columnName": "dismissed",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dismissReason",
+            "columnName": "dismissReason",
+            "affinity": "TEXT"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_alerts_domain",
+            "unique": false,
+            "columnNames": [
+              "domain"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_alerts_domain` ON `${TABLE_NAME}` (`domain`)"
+          },
+          {
+            "name": "index_alerts_headerId",
+            "unique": true,
+            "columnNames": [
+              "headerId"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_alerts_headerId` ON `${TABLE_NAME}` (`headerId`)"
+          }
+        ]
+      },
+      {
+        "tableName": "person_stats",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`address` TEXT NOT NULL, `name` TEXT NOT NULL, `youSent` INTEGER NOT NULL, `theySent` INTEGER NOT NULL, `twoWay` INTEGER NOT NULL, `firstEpochDay` INTEGER, `lastEpochDay` INTEGER, `tell` TEXT NOT NULL, `weight` INTEGER NOT NULL, PRIMARY KEY(`address`))",
+        "fields": [
+          {
+            "fieldPath": "address",
+            "columnName": "address",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "youSent",
+            "columnName": "youSent",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "theySent",
+            "columnName": "theySent",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "twoWay",
+            "columnName": "twoWay",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "firstEpochDay",
+            "columnName": "firstEpochDay",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "lastEpochDay",
+            "columnName": "lastEpochDay",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "tell",
+            "columnName": "tell",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "weight",
+            "columnName": "weight",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "address"
+          ]
+        }
+      },
+      {
+        "tableName": "person_state",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`address` TEXT NOT NULL, `told` INTEGER NOT NULL, `toldAt` INTEGER, `placement` TEXT, PRIMARY KEY(`address`))",
+        "fields": [
+          {
+            "fieldPath": "address",
+            "columnName": "address",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "told",
+            "columnName": "told",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "toldAt",
+            "columnName": "toldAt",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "placement",
+            "columnName": "placement",
+            "affinity": "TEXT"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "address"
+          ]
+        }
+      },
+      {
+        "tableName": "sync_state",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`source` TEXT NOT NULL, `folder` TEXT, `uidValidity` INTEGER, `highestUid` INTEGER NOT NULL, `initialDone` INTEGER NOT NULL, `total` INTEGER NOT NULL, `processed` INTEGER NOT NULL, `startedAt` INTEGER, `lastSyncAt` INTEGER, `lastError` TEXT, PRIMARY KEY(`source`))",
+        "fields": [
+          {
+            "fieldPath": "source",
+            "columnName": "source",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "folder",
+            "columnName": "folder",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "uidValidity",
+            "columnName": "uidValidity",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "highestUid",
+            "columnName": "highestUid",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "initialDone",
+            "columnName": "initialDone",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "total",
+            "columnName": "total",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "processed",
+            "columnName": "processed",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "startedAt",
+            "columnName": "startedAt",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "lastSyncAt",
+            "columnName": "lastSyncAt",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "lastError",
+            "columnName": "lastError",
+            "affinity": "TEXT"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "source"
+          ]
+        }
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '37be5f6918f876573459d1b0ba65a41c')"
+    ]
+  }
+}
