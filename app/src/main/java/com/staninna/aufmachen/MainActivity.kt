@@ -6,11 +6,14 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.lifecycle.lifecycleScope
 import com.staninna.aufmachen.data.AppSettings
 import com.staninna.aufmachen.data.LockMode
@@ -42,12 +45,15 @@ class MainActivity : AppCompatActivity() {
             // lock the user out of the session that just set it. It applies from the next start.
             val firstLockMode = remember { s.lockMode }
             if (firstLockMode == LockMode.NONE && s.lockMode != LockMode.NONE) unlocked = true
+            val locked = s.lockMode != LockMode.NONE && !unlocked
             AufmachenTheme(s.theme) {
-                if (s.lockMode != LockMode.NONE && !unlocked) {
-                    LockScreen(s.lockMode) { unlocked = true }
-                } else {
+                // The app stays composed under the lock screen, so unlocking returns to the
+                // screen the user left instead of a fresh Home. The lock's Surface takes all
+                // touches; the semantics are cleared so TalkBack can't reach what is behind it.
+                Box(if (locked) Modifier.clearAndSetSemantics {} else Modifier) {
                     AppNav(s.onboardingDone, sharedPdf) { sharedPdf = null }
                 }
+                if (locked) LockScreen(s.lockMode) { unlocked = true }
             }
         }
     }
