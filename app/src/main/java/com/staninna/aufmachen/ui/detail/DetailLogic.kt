@@ -1,5 +1,6 @@
 package com.staninna.aufmachen.ui.detail
 
+import com.staninna.aufmachen.model.Status
 import com.staninna.aufmachen.model.WhyPart
 import kotlin.math.abs
 import kotlin.math.roundToInt
@@ -37,4 +38,19 @@ fun sparkBars(perYear: Map<Int, Int>): List<Pair<Int, Float>> {
     if (perYear.isEmpty()) return emptyList()
     val max = perYear.values.max().coerceAtLeast(1)
     return (perYear.keys.min()..perYear.keys.max()).map { y -> y to (perYear[y] ?: 0).toFloat() / max }
+}
+
+/** "Finance +40, billing +10": the two biggest score components. */
+fun whySummary(components: List<WhyPart>): String =
+    whyRows(components).take(2).joinToString(", ") { "${it.key} ${signedPoints(it.points)}" }
+
+/** What the "next step" card shows. */
+enum class NextStep { FAILED, ASK, STEPS, ADD_PROOF, DONE }
+
+/** Picks the next-step card from the status. An open watchdog failure wins over everything. */
+fun nextStep(status: Status, failed: Boolean, hasSteps: Boolean): NextStep = when {
+    failed -> NextStep.FAILED
+    status == Status.TODO -> if (hasSteps) NextStep.STEPS else NextStep.ASK
+    status == Status.CHANGED -> NextStep.ADD_PROOF
+    else -> NextStep.DONE
 }

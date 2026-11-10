@@ -1,5 +1,6 @@
 package com.staninna.aufmachen.ui.detail
 
+import com.staninna.aufmachen.model.Status
 import com.staninna.aufmachen.model.WhyPart
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -42,5 +43,22 @@ class DetailLogicTest {
         assertEquals(1f, bars[0].second, 0f)
         assertEquals(0f, bars[1].second, 0f)
         assertEquals(0.5f, bars[3].second, 0f)
+    }
+
+    @Test fun whySummaryTakesTopTwo() {
+        val parts = listOf(WhyPart("billing", 10.0), WhyPart("Finance", 40.0), WhyPart("x", 3.0), WhyPart("none", 0.2))
+        assertEquals("Finance +40, billing +10", whySummary(parts))
+        assertEquals("", whySummary(emptyList()))
+    }
+
+    @Test fun nextStepFromState() {
+        assertEquals(NextStep.ASK, nextStep(Status.TODO, false, false))
+        assertEquals(NextStep.STEPS, nextStep(Status.TODO, false, true))
+        assertEquals(NextStep.ADD_PROOF, nextStep(Status.CHANGED, false, true))
+        assertEquals(NextStep.FAILED, nextStep(Status.CHANGED, true, false))
+        assertEquals(NextStep.FAILED, nextStep(Status.VERIFIED, true, true))
+        for (s in listOf(Status.VERIFIED, Status.DELETED, Status.DELETION_REQUESTED, Status.UNSUBSCRIBED, Status.IGNORED)) {
+            assertEquals(NextStep.DONE, nextStep(s, false, true))
+        }
     }
 }

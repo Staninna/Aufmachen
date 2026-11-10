@@ -6,7 +6,6 @@
     <string name="detail_none">none</string>
     <string name="detail_not_found">No service found for %1$s. Rescan or go back.</string>
     <string name="detail_score">Score %1$d</string>
-    <string name="detail_status">Status</string>
     <string name="detail_domains">Domains</string>
     <string name="detail_domain_merged">%1$s (merged)</string>
     <string name="detail_unmerge">Unmerge</string>
@@ -52,15 +51,12 @@
     <string name="detail_new_address">New address</string>
     <string name="detail_no_address">No address yet. Set your domain in Settings or pick one here.</string>
     <string name="detail_change">Change</string>
-    <string name="detail_address_custom">Own address for this service. Tap the address to copy it.</string>
-    <string name="detail_address_bucket">From the bucket for this service. Tap the address to copy it.</string>
     <string name="detail_pick_bucket">Pick a bucket</string>
     <string name="detail_no_domain">Buckets have no addresses until you set your domain in Settings.</string>
     <string name="detail_own_address">Give this service its own address</string>
     <string name="detail_address_invalid">Enter a full address like name@example.com</string>
     <string name="detail_reset_bucket">Reset to bucket</string>
 
-    <string name="detail_login">Login</string>
     <string name="detail_google_login">Signs in with Google</string>
     <string name="detail_login_banner">Switch login method first (set a password or other login), before Gmail is closed.</string>
     <string name="detail_login_switched">Login switched</string>
@@ -74,8 +70,6 @@
     <string name="detail_pdf_missing">The PDF file is not available</string>
     <string name="detail_pdf_failed">Could not copy that PDF</string>
 
-    <string name="detail_steps">Steps</string>
-    <string name="detail_steps_empty">No steps yet. Use Ask Claude, then paste its answer.</string>
     <plurals name="detail_steps_progress">
         <item quantity="one">%1$d of %2$d step done</item>
         <item quantity="other">%1$d of %2$d steps done</item>
@@ -84,10 +78,8 @@
     <string name="detail_gotchas">Gotchas</string>
     <string name="detail_bullet">• %1$s</string>
     <string name="detail_privacy_contact">Privacy contact: %1$s</string>
-    <string name="detail_notes">Claude notes</string>
+    <string name="detail_notes">Claude\'s notes</string>
 
-    <string name="detail_actions">Actions</string>
-    <string name="detail_add_proof_hint">You can also share a PDF straight from the Tuta app to Aufmachen.</string>
     <string name="detail_act_ask_migrate">Ask Claude (migrate)</string>
     <string name="detail_act_ask_delete">Ask Claude (delete)</string>
     <string name="detail_act_paste">Paste Claude\'s answer</string>
@@ -101,10 +93,6 @@
     <string name="detail_act_merge">Merge with…</string>
     <string name="detail_act_gmail">Open in Gmail</string>
 
-    <string name="detail_ask_title">Ask Claude</string>
-    <string name="detail_ask_ok">Copy and open Claude</string>
-    <string name="detail_ask_migrate_text">Copies a prompt about %1$s to the clipboard and opens Claude. The prompt holds the service name, its domains, its category and a few yes/no facts. It holds no addresses or subjects.</string>
-    <string name="detail_ask_delete_text">Copies a prompt about deleting your account at %1$s to the clipboard and opens Claude. The prompt holds the service name, its domains, its category and a few yes/no facts. It holds no addresses or subjects.</string>
     <string name="detail_clipboard_empty">The clipboard is empty</string>
     <string name="detail_changed_title">Mark as changed?</string>
     <string name="detail_changed_text">%1$s moves to Changed (unverified). From now on, any mail from it to the old mailbox raises a watchdog alert. Nothing is sent.</string>
@@ -118,9 +106,6 @@
     <string name="detail_reset_title">Reset to To do?</string>
     <string name="detail_reset_text">%1$s goes back to To do, and an open watchdog failure is cleared. Nothing is sent.</string>
     <string name="detail_reset_ok">Reset</string>
-    <string name="detail_gmail_title">Open in Gmail?</string>
-    <string name="detail_gmail_text">Opens a Gmail web search for mail from %1$s in your browser. You sign in there as usual.</string>
-    <string name="detail_gmail_ok">Open</string>
 
     <string name="detail_merge_pick">Merge with…</string>
     <string name="detail_search">Search services</string>
@@ -165,4 +150,36 @@
     <string name="detail_gdpr_failed">Sending failed: %1$s. Your text is kept.</string>
     <string name="detail_gdpr_unknown_error">unknown error</string>
     <string name="detail_gdpr_sent_note">Erasure request sent to %1$s</string>
+
+    <string name="detail_next_ask">Ask Claude</string>
+    <string name="detail_next_ask_again">Ask Claude again</string>
+    <string name="detail_done_line">%1$s on %2$s</string>
+    <string name="detail_copy">Copy address</string>
+    <string name="detail_expand">Expand</string>
+    <string name="detail_collapse">Collapse</string>
+    <string name="detail_about">About</string>
+    <string name="detail_display_names">Display names</string>
+    <string name="detail_show_all">Show all</string>
+    <string name="detail_show_fewer">Show fewer</string>
+    <string name="detail_privacy_short">privacy contact</string>
+    <string name="detail_notes_saved">Saved notes</string>
+    <string name="detail_stats_summary">%1$s, last seen %2$s</string>
+    <string name="detail_moved">Moved to %1$s</string>
+    <string name="detail_moved_auto">Moved back to the automatic tab</string>
+    <plurals name="detail_mails_count">
+        <item quantity="one">%1$d mail</item>
+        <item quantity="other">%1$d mails</item>
+    </plurals>
+    <plurals name="detail_days_ago">
+        <item quantity="one">%1$d day ago</item>
+        <item quantity="other">%1$d days ago</item>
+    </plurals>
+    <plurals name="detail_domains_count">
+        <item quantity="one">%1$d domain</item>
+        <item quantity="other">%1$d domains</item>
+    </plurals>
+    <plurals name="detail_senders_count">
+        <item quantity="one">%1$d sender address</item>
+        <item quantity="other">%1$d sender addresses</item>
+    </plurals>
 </resources>

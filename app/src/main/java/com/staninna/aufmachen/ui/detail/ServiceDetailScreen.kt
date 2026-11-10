@@ -11,6 +11,15 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.runtime.saveable.rememberSaveable
+import com.staninna.aufmachen.data.TimelineKind
+import com.staninna.aufmachen.model.Placement
+import com.staninna.aufmachen.ui.common.MoveToDialog
+import com.staninna.aufmachen.ui.common.placementLabel
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -63,7 +72,6 @@ import com.staninna.aufmachen.ui.actions.gmailSearchUrl
 import com.staninna.aufmachen.ui.actions.openUrl
 import com.staninna.aufmachen.ui.actions.readClipboard
 import com.staninna.aufmachen.ui.common.BackTopBar
-import com.staninna.aufmachen.ui.common.StatusChip
 import com.staninna.aufmachen.ui.common.TierChip
 import com.staninna.aufmachen.ui.common.tierLabel
 import com.staninna.aufmachen.ui.nav.Routes
@@ -79,6 +87,7 @@ private sealed interface Sheet {
     data object Tier : Sheet
     data object Address : Sheet
     data object MergePick : Sheet
+    data object Move : Sheet
     data class MergeConfirm(val other: ServiceView) : Sheet
     data class Paste(val raw: String, val parsed: ClaudeAnswer?) : Sheet
 }
@@ -94,6 +103,10 @@ fun ServiceDetailScreen(nav: NavHostController, domain: String) {
     var confirm by remember { mutableStateOf<Confirm?>(null) }
     var menu by remember { mutableStateOf(false) }
     var unmergeTarget by remember { mutableStateOf<String?>(null) }
+    val snack = remember { SnackbarHostState() }
+    // Sections are collapsed by default; this holds the ones the user opened.
+    var open by rememberSaveable { mutableStateOf(setOf<String>()) }
+    fun toggle(key: String) { open = if (key in open) open - key else open + key }
 
     val picker = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
         if (uri != null) scope.launch {
@@ -110,52 +123,57 @@ fun ServiceDetailScreen(nav: NavHostController, domain: String) {
         confirm = Confirm(ctx.getString(title), ctx.getString(text, domain), ctx.getString(ok)) { vm.setStatus(status) }
     }
 
-    val actions: List<DetailAction> = if (s == null) emptyList() else listOf(
-        DetailAction(R.string.detail_act_ask_migrate) {
-            confirm = Confirm(ctx.getString(R.string.detail_ask_title), ctx.getString(R.string.detail_ask_migrate_text, domain),
-                ctx.getString(R.string.detail_ask_ok)) { askClaude(ctx, s, ClaudeGoal.MIGRATE) }
-        },
-        DetailAction(R.string.detail_act_ask_delete) {
-            confirm = Confirm(ctx.getString(R.string.detail_ask_title), ctx.getString(R.string.detail_ask_delete_text, domain),
-                ctx.getString(R.string.detail_ask_ok)) { askClaude(ctx, s, ClaudeGoal.DELETE) }
-        },
-        DetailAction(R.string.detail_act_paste) {
-            val raw = readClipboard(ctx)?.trim()
-            if (raw.isNullOrEmpty()) Toast.makeText(ctx, R.string.detail_clipboard_empty, Toast.LENGTH_SHORT).show()
-            else sheet = Sheet.Paste(raw, ClaudeAnswerParser.parse(raw))
-        },
-        DetailAction(R.string.detail_act_changed) {
-            statusConfirm(Status.CHANGED, R.string.detail_changed_title, R.string.detail_changed_text, R.string.detail_changed_ok)
-        },
-        DetailAction(R.string.detail_act_deleted) {
-            statusConfirm(Status.DELETED, R.string.detail_deleted_title, R.string.detail_deleted_text, R.string.detail_deleted_ok)
-        },
-        DetailAction(R.string.detail_act_ignore) {
-            statusConfirm(Status.IGNORED, R.string.detail_ignore_title, R.string.detail_ignore_text, R.string.detail_ignore_ok)
-        },
-        DetailAction(R.string.detail_act_reset) {
-            statusConfirm(Status.TODO, R.string.detail_reset_title, R.string.detail_reset_text, R.string.detail_reset_ok)
-        },
-        DetailAction(R.string.detail_act_add_proof) { picker.launch(arrayOf("application/pdf")) },
-        DetailAction(R.string.detail_act_unsubscribe) {
-            Selection.unsubscribe = listOf(domain)
-            nav.navigate(Routes.UNSUBSCRIBE_CONFIRM)
-        },
-        DetailAction(R.string.detail_act_gdpr) { nav.navigate(Routes.gdpr(domain)) },
-        DetailAction(R.string.detail_act_merge) { sheet = Sheet.MergePick },
-        DetailAction(R.string.detail_act_gmail) {
-            confirm = Confirm(ctx.getString(R.string.detail_gmail_title), ctx.getString(R.string.detail_gmail_text, domain),
-                ctx.getString(R.string.detail_gmail_ok)) { openUrl(ctx, gmailSearchUrl(s.domains)) }
-        },
-    )
+    fun ask(goal: ClaudeGoal) { if (s != null) askClaude(ctx, s, goal) }
+    val paste = {
+        val raw = readClipboard(ctx)?.trim()
+        if (raw.isNullOrEmpty()) Toast.makeText(ctx, R.string.detail_clipboard_empty, Toast.LENGTH_SHORT).show()
+        else sheet = Sheet.Paste(raw, ClaudeAnswerParser.parse(raw))
+    }
+    val addProof = { picker.launch(arrayOf("application/pdf")) }
 
-    Scaffold(topBar = {
-        BackTopBar(s?.name ?: domain, nav) {
+    val menuGroups: List<List<DetailAction>> = if (s == null) emptyList() else listOf(
+        listOf(
+            DetailAction(R.string.detail_act_ask_migrate) { ask(ClaudeGoal.MIGRATE) },
+            DetailAction(R.string.detail_act_ask_delete) { ask(ClaudeGoal.DELETE) },
+            DetailAction(R.string.detail_act_paste, paste),
+        ),
+        listOf(DetailAction(R.string.move_action) { sheet = Sheet.Move }),
+        listOfNotNull(
+            if (s.status == Status.TODO) DetailAction(R.string.detail_act_changed) {
+                statusConfirm(Status.CHANGED, R.string.detail_changed_title, R.string.detail_changed_text, R.string.detail_changed_ok)
+            } else null,
+            if (s.status != Status.DELETED && s.status != Status.DELETION_REQUESTED) DetailAction(R.string.detail_act_deleted) {
+                statusConfirm(Status.DELETED, R.string.detail_deleted_title, R.string.detail_deleted_text, R.string.detail_deleted_ok)
+            } else null,
+            if (s.status != Status.IGNORED) DetailAction(R.string.detail_act_ignore) {
+                statusConfirm(Status.IGNORED, R.string.detail_ignore_title, R.string.detail_ignore_text, R.string.detail_ignore_ok)
+            } else null,
+            if (s.status != Status.TODO) DetailAction(R.string.detail_act_reset) {
+                statusConfirm(Status.TODO, R.string.detail_reset_title, R.string.detail_reset_text, R.string.detail_reset_ok)
+            } else null,
+        ),
+        listOf(
+            DetailAction(R.string.detail_act_add_proof) { addProof() },
+            DetailAction(R.string.detail_act_unsubscribe) {
+                Selection.unsubscribe = listOf(domain)
+                nav.navigate(Routes.UNSUBSCRIBE_CONFIRM)
+            },
+            DetailAction(R.string.detail_act_gdpr) { nav.navigate(Routes.gdpr(domain)) },
+            DetailAction(R.string.detail_act_merge) { sheet = Sheet.MergePick },
+            DetailAction(R.string.detail_act_gmail) { openUrl(ctx, gmailSearchUrl(s.domains)) },
+        ),
+    ).filter { it.isNotEmpty() }
+
+    Scaffold(snackbarHost = { SnackbarHost(snack) }, topBar = {
+        BackTopBar("", nav) {
             if (s != null) {
                 IconButton(onClick = { menu = true }) { Icon(Icons.Default.MoreVert, stringResource(R.string.detail_more)) }
                 DropdownMenu(menu, onDismissRequest = { menu = false }) {
-                    actions.forEach { a ->
-                        DropdownMenuItem(text = { Text(stringResource(a.label)) }, onClick = { menu = false; a.onClick() })
+                    menuGroups.forEachIndexed { gi, group ->
+                        if (gi > 0) HorizontalDivider()
+                        group.forEach { a ->
+                            DropdownMenuItem(text = { Text(stringResource(a.label)) }, onClick = { menu = false; a.onClick() })
+                        }
                     }
                 }
             }
@@ -167,26 +185,59 @@ fun ServiceDetailScreen(nav: NavHostController, domain: String) {
                 DetailState.NotFound -> Text(
                     stringResource(R.string.detail_not_found, domain), Modifier.align(Alignment.Center).padding(24.dp),
                 )
-                is DetailState.Ready -> LazyColumn(
-                    Modifier.fillMaxSize(), contentPadding = androidx.compose.foundation.layout.PaddingValues(16.dp),
-                    verticalArrangement = Arrangement.spacedBy(16.dp),
-                ) {
+                is DetailState.Ready -> {
                     val v = st.service
-                    item("header") { HeaderSection(st, { sheet = Sheet.Tier }, { unmergeTarget = it }) }
-                    item("status") {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Text(stringResource(R.string.detail_status), Modifier.padding(end = 8.dp))
-                            StatusChip(v)
+                    val step = nextStep(v.status, v.state.failed, v.steps.isNotEmpty())
+                    val stepsInCard = step == NextStep.STEPS
+                    val alert = st.timeline.filter { it.kind == TimelineKind.WATCHDOG }.maxByOrNull { it.at }?.text
+                    val latest = st.timeline.maxByOrNull { it.at }
+                    LazyColumn(
+                        Modifier.fillMaxSize(), contentPadding = PaddingValues(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(12.dp),
+                    ) {
+                        item("header") { HeaderSection(v) { sheet = Sheet.Tier } }
+                        item("next") {
+                            NextStepCard(
+                                v, step, alert,
+                                onAsk = { ask(ClaudeGoal.MIGRATE) }, onPaste = paste,
+                                onMarkChanged = {
+                                    statusConfirm(Status.CHANGED, R.string.detail_changed_title, R.string.detail_changed_text, R.string.detail_changed_ok)
+                                },
+                                onAddProof = { addProof() },
+                                onTick = { i, c -> vm.setStepDone(i, c) },
+                                onOpenSettings = { openUrl(ctx, it) },
+                            )
+                        }
+                        item("address") { AddressRow(v, { copyText(ctx, "Address", it) }, { sheet = Sheet.Address }) }
+                        item("why") {
+                            CollapsibleSection(
+                                stringResource(R.string.detail_why), whySummary(v.components).ifEmpty { stringResource(R.string.detail_why_empty) },
+                                "why" in open, { toggle("why") },
+                            ) { WhyContent(v) }
+                        }
+                        item("stats") {
+                            CollapsibleSection(
+                                stringResource(R.string.detail_stats), statsSummary(v), "stats" in open, { toggle("stats") },
+                            ) { StatsContent(v) }
+                        }
+                        if (hasNotes(v, stepsInCard)) item("notes") {
+                            CollapsibleSection(
+                                stringResource(R.string.detail_notes), notesSummary(v, stepsInCard), "notes" in open, { toggle("notes") },
+                            ) { NotesContent(v, stepsInCard, { i, c -> vm.setStepDone(i, c) }, { openUrl(ctx, it) }) }
+                        }
+                        item("history") {
+                            CollapsibleSection(
+                                stringResource(R.string.detail_timeline),
+                                latest?.text ?: stringResource(R.string.detail_timeline_empty),
+                                "history" in open, { toggle("history") },
+                            ) { HistoryContent(st.timeline, st.proofs) { openProof(ctx, it) } }
+                        }
+                        item("about") {
+                            CollapsibleSection(
+                                stringResource(R.string.detail_about), aboutSummary(v), "about" in open, { toggle("about") },
+                            ) { AboutContent(st, { unmergeTarget = it }, { vm.setGoogleLogin(it) }, { vm.setLoginSwitched(it) }) }
                         }
                     }
-                    item("stats") { StatsSection(v) }
-                    item("address") {
-                        AddressSection(v, { copyText(ctx, "Address", it) }, { sheet = Sheet.Address })
-                    }
-                    item("login") { LoginSection(v, { vm.setGoogleLogin(it) }, { vm.setLoginSwitched(it) }) }
-                    item("timeline") { TimelineSection(st.timeline, st.proofs) { openProof(ctx, it) } }
-                    item("steps") { StepsSection(v, { i, c -> vm.setStepDone(i, c) }) { openUrl(ctx, it) } }
-                    item("actions") { ActionsSection(actions) }
                 }
             }
         }
@@ -226,6 +277,19 @@ fun ServiceDetailScreen(nav: NavHostController, domain: String) {
         Sheet.None -> {}
         Sheet.Tier -> if (ready != null) TierSheet(ready.service, vm, close)
         Sheet.Address -> if (ready != null) AddressSheet(ready, vm, close)
+        Sheet.Move -> if (ready != null) {
+            val names = Placement.entries.associateWith { placementLabel(it) }
+            MoveToDialog(1, ready.service.placement, { p ->
+                close()
+                scope.launch {
+                    ctx.container.repo.moveServices(listOf(domain), p)
+                    snack.showSnackbar(
+                        if (p == null) ctx.getString(R.string.detail_moved_auto)
+                        else ctx.getString(R.string.detail_moved, names.getValue(p)),
+                    )
+                }
+            }, close)
+        }
         Sheet.MergePick -> MergePicker(vm, { sheet = Sheet.MergeConfirm(it) }, close)
         is Sheet.MergeConfirm -> AlertDialog(
             onDismissRequest = close,
