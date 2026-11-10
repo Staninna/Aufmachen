@@ -153,29 +153,30 @@ class Repo(val db: AppDatabase, val settings: SettingsStore) {
     }
 
     /**
-     * Moves people out of (or back into) People. A person moved to a service tab takes their
-     * domain's service along, when the domain is a company and not a freemail provider.
-     * @return how many of [addresses] had no service to move (freemail), so they were only hidden.
+     * The services (group keys) behind [addresses]: company domains that are a known service.
+     * Freemail senders have none. Show these to the user before offering to move them along.
      */
-    suspend fun movePeople(addresses: Collection<String>, to: Placement?): Int {
-        val states = db.people().statesOnce().associateBy { it.address }
+    suspend fun servicesOfPeople(addresses: Collection<String>): List<String> {
         val merges = db.services().mergesOnce().associate { it.domain to it.intoDomain }
         val known = db.services().allStatsOnce().map { it.domain }.toSet()
+        return addresses.mapNotNull { a ->
+            val dom = baseDomain(a.substringAfterLast('@'))
+            (merges[dom] ?: dom).takeIf { dom !in FREEMAIL && it in known }
+        }.distinct()
+    }
+
+    /**
+     * Moves people out of (or back into) People. Only the people move, unless the user explicitly
+     * chose to also move their company's service: pass those group keys (from [servicesOfPeople])
+     * as [alsoMoveServices]. Moving a colleague must never silently move the employer's account.
+     */
+    suspend fun movePeople(addresses: Collection<String>, to: Placement?, alsoMoveServices: Collection<String> = emptyList()) {
+        val states = db.people().statesOnce().associateBy { it.address }
         val placement = to?.takeIf { it != Placement.PEOPLE }
-        val serviceKeys = mutableSetOf<String>()
-        var withoutService = 0
         db.people().upsertStates(addresses.map { a ->
             (states[a] ?: PersonStateEntity(a)).copy(placement = placement?.name)
         })
-        if (placement != null) {
-            for (a in addresses) {
-                val dom = baseDomain(a.substringAfterLast('@'))
-                val key = merges[dom] ?: dom
-                if (dom !in FREEMAIL && key in known) serviceKeys += key else withoutService++
-            }
-            moveServices(serviceKeys, placement)
-        }
-        return withoutService
+        if (placement != null && alsoMoveServices.isNotEmpty()) moveServices(alsoMoveServices, placement)
     }
 
     suspend fun unmerge(domain: String) {
