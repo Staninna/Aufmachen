@@ -1,6 +1,7 @@
 package com.staninna.aufmachen.ui.dormant
 
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,6 +27,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -50,9 +52,13 @@ import com.staninna.aufmachen.model.Status
 import com.staninna.aufmachen.ui.actions.ClaudeGoal
 import com.staninna.aufmachen.ui.actions.askClaude
 import com.staninna.aufmachen.ui.actions.relativeDay
+import com.staninna.aufmachen.ui.common.MoveToDialog
 import com.staninna.aufmachen.ui.common.StatusChip
 import com.staninna.aufmachen.ui.common.TabTopBar
 import com.staninna.aufmachen.ui.common.TierStripe
+import com.staninna.aufmachen.ui.lists.MoveRequest
+import com.staninna.aufmachen.ui.lists.rememberMoveActions
+import com.staninna.aufmachen.ui.lists.sharedPlacement
 import com.staninna.aufmachen.ui.nav.Routes
 
 private enum class Confirm { DELETED, IGNORE }
@@ -66,12 +72,15 @@ fun DormantScreen(nav: NavHostController) {
     val selected by vm.selectedVisible.collectAsState()
 
     var confirm by remember { mutableStateOf<Confirm?>(null) }
+    val mover = rememberMoveActions()
+    var request by remember { mutableStateOf<MoveRequest?>(null) }
     // Ask Claude walk-through: domains still to open, and the position of the one open now.
     var queue by remember { mutableStateOf<List<ServiceView>>(emptyList()) }
     var pos by remember { mutableStateOf(0) }
 
     Scaffold(
         topBar = { TabTopBar(stringResource(R.string.nav_dormant), nav) },
+        snackbarHost = { SnackbarHost(mover.snackbar) },
         bottomBar = {
             if (queue.isNotEmpty()) Surface(tonalElevation = 3.dp) {
                 Row(
@@ -108,6 +117,13 @@ fun DormantScreen(nav: NavHostController) {
                             Text(stringResource(R.string.lists_dormant_ignore))
                         }
                     }
+                    OutlinedButton(
+                        onClick = {
+                            val now = vm.selectedInOrder()
+                            request = MoveRequest(now.map { it.domain }, sharedPlacement(now.map { it.placement }))
+                        },
+                        modifier = Modifier.fillMaxWidth(),
+                    ) { Text(stringResource(R.string.move_action)) }
                 }
             }
         },
@@ -137,12 +153,20 @@ fun DormantScreen(nav: NavHostController) {
                             onToggle = { vm.toggle(sv.domain) },
                             onOpen = { nav.navigate(Routes.service(sv.domain)) },
                             onGdpr = { nav.navigate(Routes.gdpr(sv.domain)) },
+                            onMove = { request = MoveRequest(listOf(sv.domain), sv.placement) },
                         )
                         HorizontalDivider()
                     }
                 }
             }
         }
+    }
+
+    request?.let { r ->
+        MoveToDialog(r.ids.size, r.current, onPick = { to ->
+            request = null
+            mover.move(domains = r.ids, to = to) { vm.selectAll(false) }
+        }, onDismiss = { request = null })
     }
 
     confirm?.let { kind ->
@@ -168,29 +192,33 @@ fun DormantScreen(nav: NavHostController) {
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun DormantRow(sv: ServiceView, checked: Boolean, onToggle: () -> Unit, onOpen: () -> Unit, onGdpr: () -> Unit) {
+private fun DormantRow(sv: ServiceView, checked: Boolean, onToggle: () -> Unit, onOpen: () -> Unit, onGdpr: () -> Unit, onMove: () -> Unit) {
     val ctx = LocalContext.current
     var menu by remember { mutableStateOf(false) }
     val years = ((sv.stats.daysSince ?: 0L) / 365).toInt()
     Row(
-        Modifier.fillMaxWidth().height(IntrinsicSize.Min).clickable(onClick = onOpen),
+        Modifier.fillMaxWidth().height(IntrinsicSize.Min).combinedClickable(onClick = onOpen, onLongClick = onMove),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         TierStripe(sv.tier)
         Checkbox(checked, { onToggle() })
         Column(Modifier.weight(1f).padding(vertical = 8.dp)) {
-            Text(sv.name, style = MaterialTheme.typography.titleSmall)
+            Text(sv.name, style = MaterialTheme.typography.titleSmall, maxLines = 1)
             Text(
                 listOf(sv.stats.category, stringResource(R.string.lists_dormant_row, years, relativeDay(ctx, sv.stats.lastEpochDay)))
                     .filter { it.isNotBlank() }.joinToString(", "),
                 style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                maxLines = 1,
             )
         }
         StatusChip(sv, onClick = onOpen)
         Box {
             IconButton(onClick = { menu = true }) { Icon(Icons.Default.MoreVert, stringResource(R.string.lists_row_menu)) }
             DropdownMenu(menu, onDismissRequest = { menu = false }) {
+                DropdownMenuItem(text = { Text(stringResource(R.string.move_action)) }, onClick = { menu = false; onMove() })
                 DropdownMenuItem(
                     text = { Text(stringResource(R.string.lists_dormant_gdpr)) },
                     onClick = { menu = false; onGdpr() },

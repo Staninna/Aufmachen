@@ -1,6 +1,7 @@
 package com.staninna.aufmachen.ui.unsubscribe
 
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,7 +13,15 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Button
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
@@ -22,10 +31,12 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SuggestionChip
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -36,12 +47,15 @@ import androidx.navigation.NavHostController
 import com.staninna.aufmachen.R
 import com.staninna.aufmachen.container
 import com.staninna.aufmachen.engine.UnsubMethod
-import com.staninna.aufmachen.model.Status
 import com.staninna.aufmachen.ui.actions.gmailSearchUrl
 import com.staninna.aufmachen.ui.actions.openUrl
 import com.staninna.aufmachen.ui.actions.relativeDay
+import com.staninna.aufmachen.ui.common.MoveToDialog
 import com.staninna.aufmachen.ui.common.TabTopBar
 import com.staninna.aufmachen.ui.common.TierStripe
+import com.staninna.aufmachen.ui.lists.MoveRequest
+import com.staninna.aufmachen.ui.lists.rememberMoveActions
+import com.staninna.aufmachen.ui.lists.sharedPlacement
 import com.staninna.aufmachen.ui.nav.Routes
 import com.staninna.aufmachen.ui.nav.Selection
 
@@ -52,18 +66,30 @@ fun UnsubscribeScreen(nav: NavHostController) {
     val rows by vm.rows.collectAsState()
     val showDone by vm.showDone.collectAsState()
     val selected by vm.selectedVisible.collectAsState()
+    val mover = rememberMoveActions()
+    var request by remember { mutableStateOf<MoveRequest?>(null) }
 
     Scaffold(
         topBar = { TabTopBar(stringResource(R.string.nav_unsubscribe), nav) },
+        snackbarHost = { SnackbarHost(mover.snackbar) },
         bottomBar = {
             if (selected.isNotEmpty()) Surface(tonalElevation = 3.dp) {
-                Button(
-                    onClick = {
-                        Selection.unsubscribe = selected.toList()
-                        nav.navigate(Routes.UNSUBSCRIBE_CONFIRM)
-                    },
-                    modifier = Modifier.fillMaxWidth().padding(12.dp),
-                ) { Text(stringResource(R.string.lists_unsub_bar, selected.size)) }
+                Column(Modifier.fillMaxWidth().padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Button(
+                        onClick = {
+                            Selection.unsubscribe = selected.toList()
+                            nav.navigate(Routes.UNSUBSCRIBE_CONFIRM)
+                        },
+                        modifier = Modifier.fillMaxWidth(),
+                    ) { Text(stringResource(R.string.lists_unsub_bar, selected.size)) }
+                    OutlinedButton(
+                        onClick = {
+                            val now = rows.orEmpty().filter { it.sv.domain in selected }
+                            request = MoveRequest(now.map { it.sv.domain }, sharedPlacement(now.map { it.sv.placement }))
+                        },
+                        modifier = Modifier.fillMaxWidth(),
+                    ) { Text(stringResource(R.string.move_action)) }
+                }
             }
         },
     ) { pad ->
@@ -95,6 +121,7 @@ fun UnsubscribeScreen(nav: NavHostController) {
                             r, r.sv.domain in selected,
                             onToggle = { vm.toggle(r.sv.domain) },
                             onOpenGmail = { openUrl(ctx, gmailSearchUrl(r.sv.domains)) },
+                            onMove = { request = MoveRequest(listOf(r.sv.domain), r.sv.placement) },
                         )
                         HorizontalDivider()
                     }
@@ -102,37 +129,47 @@ fun UnsubscribeScreen(nav: NavHostController) {
             }
         }
     }
+
+    request?.let { r ->
+        MoveToDialog(r.ids.size, r.current, onPick = { to ->
+            request = null
+            mover.move(domains = r.ids, to = to) { vm.selectAll(false) }
+        }, onDismiss = { request = null })
+    }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun UnsubRow(r: UnsubRowUi, checked: Boolean, onToggle: () -> Unit, onOpenGmail: () -> Unit) {
+private fun UnsubRow(r: UnsubRowUi, checked: Boolean, onToggle: () -> Unit, onOpenGmail: () -> Unit, onMove: () -> Unit) {
     val ctx = LocalContext.current
     val sv = r.sv
     val selectable = r.method != UnsubMethod.NONE
+    var menu by remember { mutableStateOf(false) }
     Row(
-        Modifier.fillMaxWidth().height(IntrinsicSize.Min).clickable(enabled = selectable, onClick = onToggle),
+        Modifier.fillMaxWidth().height(IntrinsicSize.Min)
+            .combinedClickable(enabled = true, onClick = { if (selectable) onToggle() }, onLongClick = onMove),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         TierStripe(sv.tier)
         Checkbox(checked, { onToggle() }, enabled = selectable)
         Column(Modifier.weight(1f).padding(vertical = 8.dp)) {
-            Text(sv.name, style = MaterialTheme.typography.titleSmall)
-            sv.displayNames.firstOrNull()?.let {
-                Text(it, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            }
+            Text(sv.name, style = MaterialTheme.typography.titleSmall, maxLines = 1)
             Text(
                 stringResource(
                     R.string.lists_unsub_row_stats, sv.stats.last12, (sv.stats.readPct * 100).toInt(),
                     relativeDay(ctx, sv.stats.lastEpochDay),
                 ),
                 style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                maxLines = 1,
             )
-            if (!selectable) TextButton(onClick = onOpenGmail) { Text(stringResource(R.string.lists_open_gmail)) }
         }
-        Column(Modifier.padding(end = 8.dp), horizontalAlignment = Alignment.End) {
-            SuggestionChip(onClick = {}, label = { Text(methodLabel(r.method)) })
-            if (sv.state.unsubMethod != null || sv.status == Status.UNSUBSCRIBED) {
-                Text(stringResource(R.string.lists_done_mark), style = MaterialTheme.typography.labelSmall)
+        SuggestionChip(onClick = {}, label = { Text(methodLabel(r.method)) })
+        Box {
+            IconButton(onClick = { menu = true }) { Icon(Icons.Default.MoreVert, stringResource(R.string.lists_row_menu)) }
+            DropdownMenu(menu, onDismissRequest = { menu = false }) {
+                DropdownMenuItem(text = { Text(stringResource(R.string.move_action)) }, onClick = { menu = false; onMove() })
+                DropdownMenuItem(text = { Text(stringResource(R.string.lists_open_gmail)) }, onClick = { menu = false; onOpenGmail() })
             }
         }
     }

@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.staninna.aufmachen.data.Repo
 import com.staninna.aufmachen.data.ServiceView
+import com.staninna.aufmachen.model.Placement
 import com.staninna.aufmachen.model.Status
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,7 +23,7 @@ class DormantViewModel(private val repo: Repo) : ViewModel() {
 
     /** Null while loading. */
     val rows: StateFlow<List<ServiceView>?> = combine(repo.services, showHandled) { all, handled ->
-        all.filter { it.stats.hasAccount && it.stats.dormant && (handled || it.status !in HANDLED) }
+        all.filter { it.inTab(Placement.DORMANT) && (handled || it.status !in HANDLED) }
             .sortedByDescending { it.stats.score }
     }.flowOn(Dispatchers.Default).stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
 

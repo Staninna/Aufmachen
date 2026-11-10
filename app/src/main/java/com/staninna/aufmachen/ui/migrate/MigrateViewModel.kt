@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.staninna.aufmachen.AppContainer
 import com.staninna.aufmachen.data.ServiceView
+import com.staninna.aufmachen.model.Placement
 import com.staninna.aufmachen.model.Status
 import com.staninna.aufmachen.model.Tier
 import kotlinx.coroutines.Dispatchers
@@ -29,7 +30,12 @@ data class MigrateFilter(
     val hasSteps: Boolean = false,
 ) {
     val active: Boolean
-        get() = query.isNotBlank() || tiers.isNotEmpty() || category != null || statuses.isNotEmpty() || failed || googleLogin || hasSteps
+        get() = query.isNotBlank() || activeCount > 0
+
+    /** How many filters the Filters sheet holds are on. The search text does not count. */
+    val activeCount: Int
+        get() = tiers.size + statuses.size + (if (category != null) 1 else 0) +
+            listOf(failed, googleLogin, hasSteps).count { it }
 }
 
 /** A service plus its lowercase search text, built once per data change. */
@@ -61,7 +67,7 @@ class MigrateViewModel(c: AppContainer) : ViewModel() {
     val filter = MutableStateFlow(MigrateFilter())
 
     private val all = c.repo.services.map { list ->
-        list.filter { it.stats.hasAccount }.sortedByDescending { it.stats.score }
+        list.filter { it.inTab(Placement.MIGRATE) }.sortedByDescending { it.stats.score }
             .map { MigrateRow(it, (listOf(it.domain) + it.displayNames).joinToString(" ").lowercase()) }
     }.flowOn(Dispatchers.Default)
 
@@ -75,4 +81,19 @@ class MigrateViewModel(c: AppContainer) : ViewModel() {
     }.flowOn(Dispatchers.Default).stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), MigrateUi())
 
     fun update(block: (MigrateFilter) -> MigrateFilter) { filter.update(block) }
+
+    private val selected = MutableStateFlow<Set<String>>(emptySet())
+
+    /** Selected domains that the current filters still show. */
+    val selectedVisible: StateFlow<Set<String>> = combine(ui, selected) { u, sel ->
+        sel.intersect(u.rows.map { it.domain }.toSet())
+    }.flowOn(Dispatchers.Default).stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptySet())
+
+    fun toggle(domain: String) {
+        selected.value = selected.value.let { if (domain in it) it - domain else it + domain }
+    }
+
+    fun selectAll(on: Boolean) {
+        selected.value = if (on) ui.value.rows.map { it.domain }.toSet() else emptySet()
+    }
 }

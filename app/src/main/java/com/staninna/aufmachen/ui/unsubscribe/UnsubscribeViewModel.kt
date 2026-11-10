@@ -6,6 +6,7 @@ import com.staninna.aufmachen.data.Repo
 import com.staninna.aufmachen.data.ServiceView
 import com.staninna.aufmachen.engine.UnsubMethod
 import com.staninna.aufmachen.engine.unsubMethod
+import com.staninna.aufmachen.model.Placement
 import com.staninna.aufmachen.model.Status
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,7 +25,7 @@ class UnsubscribeViewModel(repo: Repo) : ViewModel() {
     /** Null while loading. */
     val rows: StateFlow<List<UnsubRowUi>?> = combine(repo.services, showDone) { all, done ->
         all.asSequence()
-            .filter { it.stats.newsletterLike }
+            .filter { it.inTab(Placement.UNSUBSCRIBE) }
             .filter { done || (it.status != Status.UNSUBSCRIBED && it.status != Status.IGNORED) }
             .sortedByDescending { it.stats.last12 }
             .map { UnsubRowUi(it, unsubMethod(it.unsubLinks, it.stats.unsubOneClick)) }
