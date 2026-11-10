@@ -33,6 +33,9 @@ enum class Action {
 
 enum class TellNewAddress { YES, MAYBE, NO }
 
+/** The list (bottom tab) a service or person sits in, when the user moved it there. */
+enum class Placement { MIGRATE, UNSUBSCRIBE, DORMANT, DELETE, PEOPLE }
+
 /** One named score component, e.g. "Finance" +40. */
 @Serializable
 data class WhyPart(val key: String, val points: Double)

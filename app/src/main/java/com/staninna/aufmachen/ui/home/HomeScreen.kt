@@ -49,6 +49,7 @@ import com.staninna.aufmachen.ui.actions.copyText
 import com.staninna.aufmachen.ui.actions.openUrl
 import com.staninna.aufmachen.ui.actions.relativeDay
 import com.staninna.aufmachen.ui.common.TabTopBar
+import com.staninna.aufmachen.ui.common.rememberSyncNow
 import com.staninna.aufmachen.ui.common.TierChip
 import com.staninna.aufmachen.ui.common.statusLabel
 import com.staninna.aufmachen.ui.nav.Routes
@@ -70,6 +71,7 @@ fun HomeScreen(nav: NavHostController) {
     val readiness by vm.readiness.collectAsState()
     val scope = rememberCoroutineScope()
     var refreshing by remember { mutableStateOf(false) }
+    val syncNow = rememberSyncNow()
 
     Scaffold(topBar = { TabTopBar(stringResource(R.string.nav_home), nav) }) { pad ->
         PullToRefreshBox(
@@ -78,7 +80,7 @@ fun HomeScreen(nav: NavHostController) {
                 scope.launch {
                     refreshing = true
                     try {
-                        SyncScheduler.syncNow(ctx)
+                        syncNow()
                         delay(800)
                     } finally {
                         refreshing = false

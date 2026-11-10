@@ -58,6 +58,7 @@ import com.staninna.aufmachen.data.LockMode
 import com.staninna.aufmachen.data.ThemeMode
 import com.staninna.aufmachen.mail.MailAccess
 import com.staninna.aufmachen.mail.SyncScheduler
+import com.staninna.aufmachen.ui.common.rememberSyncNow
 import com.staninna.aufmachen.ui.common.BackTopBar
 import com.staninna.aufmachen.ui.onboarding.BucketsEditor
 import com.staninna.aufmachen.ui.onboarding.CatchAllTip
@@ -141,7 +142,7 @@ private fun MailboxSection(
     val needFields = stringResource(R.string.setup_test_need_fields)
     val needPassword = stringResource(R.string.setup_settings_need_password)
     val saved = stringResource(R.string.setup_saved)
-    val syncStarted = stringResource(R.string.setup_settings_sync_started)
+    val syncNow = rememberSyncNow()
     val rescanStarted = stringResource(R.string.setup_settings_rescan_started)
     val mboxFailed = stringResource(R.string.setup_mbox_failed)
 
@@ -209,7 +210,7 @@ private fun MailboxSection(
         }
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             OutlinedButton(
-                onClick = { SyncScheduler.syncNow(ctx); say(syncStarted) },
+                onClick = syncNow,
                 enabled = hasSaved,
             ) { Text(stringResource(R.string.setup_settings_sync_now)) }
             OutlinedButton(onClick = { confirmRescan = true }) {

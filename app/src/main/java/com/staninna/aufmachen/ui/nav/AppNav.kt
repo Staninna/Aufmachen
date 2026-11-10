@@ -3,6 +3,7 @@ package com.staninna.aufmachen.ui.nav
 import android.net.Uri
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DeleteOutline
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Hotel
 import androidx.compose.material.icons.filled.Notifications
@@ -10,6 +11,7 @@ import androidx.compose.material.icons.filled.People
 import androidx.compose.material.icons.filled.SwapHoriz
 import androidx.compose.material.icons.filled.Unsubscribe
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
@@ -20,6 +22,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -30,6 +33,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.staninna.aufmachen.R
 import com.staninna.aufmachen.ui.alerts.AlertsScreen
+import com.staninna.aufmachen.ui.delete.DeleteScreen
 import com.staninna.aufmachen.ui.detail.GdprScreen
 import com.staninna.aufmachen.ui.detail.ServiceDetailScreen
 import com.staninna.aufmachen.ui.dormant.DormantScreen
@@ -57,6 +61,7 @@ object Routes {
     const val UNSUBSCRIBE = "unsubscribe"
     const val UNSUBSCRIBE_CONFIRM = "unsubscribe/confirm"
     const val DORMANT = "dormant"
+    const val DELETE = "delete"
     const val PEOPLE = "people"
     const val COMPOSE_MOVED = "people/compose"
     const val ALERTS = "alerts"
@@ -78,6 +83,7 @@ object Routes {
 object Selection {
     var unsubscribe: List<String> = emptyList()
     var dormantDelete: List<String> = emptyList()
+    var delete: List<String> = emptyList()
     var people: List<String> = emptyList()
 }
 
@@ -89,6 +95,7 @@ private val tabs = listOf(
     Tab(Routes.UNSUBSCRIBE, R.string.nav_unsubscribe, Icons.Default.Unsubscribe),
     Tab(Routes.DORMANT, R.string.nav_dormant, Icons.Default.Hotel),
     Tab(Routes.PEOPLE, R.string.nav_people, Icons.Default.People),
+    Tab(Routes.DELETE, R.string.nav_delete, Icons.Default.DeleteOutline),
 )
 
 /**
@@ -117,7 +124,11 @@ fun AppNav(onboardingDone: Boolean, sharedPdf: String?, onSharedPdfConsumed: () 
                         selected = route == t.route,
                         onClick = { nav.navigateTab(t.route) },
                         icon = { Icon(t.icon, null) },
-                        label = { Text(stringResource(t.label)) },
+                        // Six tabs: one line, small type, so long labels like "Unsubscribe" fit.
+                        label = {
+                            Text(stringResource(t.label), maxLines = 1, overflow = TextOverflow.Ellipsis,
+                                style = MaterialTheme.typography.labelSmall)
+                        },
                     )
                 }
             }
@@ -135,6 +146,7 @@ fun AppNav(onboardingDone: Boolean, sharedPdf: String?, onSharedPdfConsumed: () 
             composable(Routes.UNSUBSCRIBE_CONFIRM) { UnsubscribeConfirmScreen(nav) }
             composable(Routes.DORMANT) { DormantScreen(nav) }
             composable(Routes.PEOPLE) { PeopleScreen(nav) }
+            composable(Routes.DELETE) { DeleteScreen(nav) }
             composable(Routes.COMPOSE_MOVED) { ComposeMovedScreen(nav) }
             composable(Routes.ALERTS) { AlertsScreen(nav) }
             composable(Routes.SETTINGS) { SettingsScreen(nav) }

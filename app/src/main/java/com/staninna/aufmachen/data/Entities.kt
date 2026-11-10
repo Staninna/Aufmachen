@@ -106,6 +106,7 @@ data class ServiceStateEntity(
     val claudeNotes: String? = null,       // unparsed answer text
     val unsubscribedAt: Long? = null,
     val unsubMethod: String? = null,       // "oneclick" | "mailto" | "web"
+    val placement: String? = null,         // Placement.name chosen by the user; null = the app's guess
 )
 
 /** domain -> group key. A group key maps to itself implicitly (no row). */
@@ -180,6 +181,7 @@ data class PersonStateEntity(
     @PrimaryKey val address: String,
     val told: Boolean = false,
     val toldAt: Long? = null,
+    val placement: String? = null,         // Placement.name; set and not PEOPLE = hidden from People
 )
 
 /** Scan/sync bookkeeping per source. */

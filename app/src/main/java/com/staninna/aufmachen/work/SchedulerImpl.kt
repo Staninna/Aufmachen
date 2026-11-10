@@ -48,20 +48,20 @@ internal object SchedulerImpl {
         WorkManager.getInstance(app).enqueueUniqueWork(WORK_SCAN, policy, req)
     }
 
-    fun syncNow(context: Context) {
+    fun syncNow(context: Context, allowMetered: Boolean = true) {
         val app = context.applicationContext
         scope.launch {
             val c = app.container
             if (c.settings.get().imap == null) return@launch
             val wm = WorkManager.getInstance(app)
             if (c.db.sync().get(HeaderEntity.SOURCE_IMAP)?.initialDone != true) {
-                // First scan not done yet. A manual tap starts it now on any network, instead of
-                // leaving it queued behind the Wi-Fi-only constraint. A scan already running is kept.
+                // First scan not done yet. A manual tap starts it now (on any network when the user
+                // allowed mobile data), instead of leaving it queued. A scan already running is kept.
                 val running = wm.getWorkInfosForUniqueWork(WORK_SCAN).get()
                     .any { it.state == WorkInfo.State.RUNNING }
                 if (!running) {
                     val req = OneTimeWorkRequestBuilder<ScanWorker>()
-                        .setConstraints(net(false))
+                        .setConstraints(net(wifiOnly = !allowMetered))
                         .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 1, TimeUnit.MINUTES)
                         .build()
                     wm.enqueueUniqueWork(WORK_SCAN, ExistingWorkPolicy.REPLACE, req)

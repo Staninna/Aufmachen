@@ -39,4 +39,16 @@
     <string name="status_ignored">Genegeerd</string>
     <string name="status_failed">Mislukt: mailt Gmail nog</string>
     <string name="google_login_menu">Inloggen met Google</string>
+    <string name="nav_delete">Verwijderen</string>
+    <string name="move_title_one">Verplaatsen naar</string>
+    <string name="move_title_many">%1$d verplaatsen naar</string>
+    <string name="move_automatic">Laat de app kiezen</string>
+    <string name="move_cancel">Annuleren</string>
+    <string name="move_action">Verplaatsen naar…</string>
+    <string name="sync_metered_title">Eerste scan via mobiele data?</string>
+    <string name="sync_metered_text">De eerste scan leest de headers van elke mail, zo\'n 1 tot 2 kB per stuk. Voor een grote mailbox is dat een paar honderd MB. Latere syncs halen alleen nieuwe mail op en gebruiken heel weinig.</string>
+    <string name="sync_metered_start">Nu starten</string>
+    <string name="sync_metered_wait">Wachten op wifi</string>
+    <string name="sync_started">Synchronisatie gestart</string>
+    <string name="sync_waiting_wifi">De scan start zodra je op wifi zit</string>
 </resources>

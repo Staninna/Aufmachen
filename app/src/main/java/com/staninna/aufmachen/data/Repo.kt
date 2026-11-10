@@ -3,7 +3,10 @@ package com.staninna.aufmachen.data
 import com.staninna.aufmachen.engine.Analyzer
 import com.staninna.aufmachen.engine.MailRecord
 import com.staninna.aufmachen.engine.ServiceScore
+import com.staninna.aufmachen.engine.FREEMAIL
+import com.staninna.aufmachen.engine.baseDomain
 import com.staninna.aufmachen.model.Action
+import com.staninna.aufmachen.model.Placement
 import com.staninna.aufmachen.model.AddressBucket
 import com.staninna.aufmachen.model.Status
 import com.staninna.aufmachen.model.Tier
@@ -54,7 +57,25 @@ data class ServiceView(
     val snoozed: Boolean get() = (state.snoozedUntil ?: 0) > System.currentTimeMillis()
     /** Display name for the service: the group key domain. */
     val name: String get() = stats.domain
+
+    /** The tab the user moved this service to, or null when the app's guess applies. */
+    val placement: Placement? get() = state.placement?.let { runCatching { Placement.valueOf(it) }.getOrNull() }
+
+    /**
+     * Whether this service is listed in [tab]. A user's move wins and puts it in exactly one tab.
+     * Without one, the app's guess applies, and a service may then show in more than one tab.
+     */
+    fun inTab(tab: Placement): Boolean = placement?.let { it == tab } ?: when (tab) {
+        Placement.MIGRATE -> stats.hasAccount
+        Placement.UNSUBSCRIBE -> stats.newsletterLike
+        Placement.DORMANT -> stats.hasAccount && stats.dormant
+        Placement.DELETE, Placement.PEOPLE -> false
+    }
 }
+
+/** Whether a person row belongs in People: not moved elsewhere by the user. */
+fun PersonStateEntity?.inPeople(): Boolean =
+    this?.placement == null || this.placement == Placement.PEOPLE.name
 
 /** Picks the bucket for a service: category match first, then tier, else the main bucket. */
 fun bucketFor(buckets: List<AddressBucket>, category: String, tier: Tier): AddressBucket? =
@@ -121,6 +142,40 @@ class Repo(val db: AppDatabase, val settings: SettingsStore) {
         db.services().upsertMerge(MergeEntity(domain, target))
         timeline(target, TimelineKind.NOTE, "Merged $domain")
         rescore()
+    }
+
+    /** Moves services to the [to] tab; null puts them back where the app guesses. Survives rescans. */
+    suspend fun moveServices(domains: Collection<String>, to: Placement?) {
+        for (d in domains) {
+            updateState(d) { it.copy(placement = to?.name) }
+            timeline(d, TimelineKind.NOTE, if (to == null) "Moved back to the automatic tab" else "Moved to ${to.name}")
+        }
+    }
+
+    /**
+     * Moves people out of (or back into) People. A person moved to a service tab takes their
+     * domain's service along, when the domain is a company and not a freemail provider.
+     * @return how many of [addresses] had no service to move (freemail), so they were only hidden.
+     */
+    suspend fun movePeople(addresses: Collection<String>, to: Placement?): Int {
+        val states = db.people().statesOnce().associateBy { it.address }
+        val merges = db.services().mergesOnce().associate { it.domain to it.intoDomain }
+        val known = db.services().allStatsOnce().map { it.domain }.toSet()
+        val placement = to?.takeIf { it != Placement.PEOPLE }
+        val serviceKeys = mutableSetOf<String>()
+        var withoutService = 0
+        db.people().upsertStates(addresses.map { a ->
+            (states[a] ?: PersonStateEntity(a)).copy(placement = placement?.name)
+        })
+        if (placement != null) {
+            for (a in addresses) {
+                val dom = baseDomain(a.substringAfterLast('@'))
+                val key = merges[dom] ?: dom
+                if (dom !in FREEMAIL && key in known) serviceKeys += key else withoutService++
+            }
+            moveServices(serviceKeys, placement)
+        }
+        return withoutService
     }
 
     suspend fun unmerge(domain: String) {

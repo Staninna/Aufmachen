@@ -40,4 +40,16 @@
     <string name="status_ignored">Ignored</string>
     <string name="status_failed">Failed: still mailing Gmail</string>
     <string name="google_login_menu">Sign in with Google</string>
+    <string name="nav_delete">Delete</string>
+    <string name="move_title_one">Move to</string>
+    <string name="move_title_many">Move %1$d to</string>
+    <string name="move_automatic">Let the app decide</string>
+    <string name="move_cancel">Cancel</string>
+    <string name="move_action">Move to…</string>
+    <string name="sync_metered_title">First scan on mobile data?</string>
+    <string name="sync_metered_text">The first scan reads the headers of every mail, about 1 to 2 KB each. For a large mailbox that is a few hundred MB. Later syncs only fetch new mail and use very little.</string>
+    <string name="sync_metered_start">Start now</string>
+    <string name="sync_metered_wait">Wait for Wi-Fi</string>
+    <string name="sync_started">Sync started</string>
+    <string name="sync_waiting_wifi">The scan starts when you are on Wi-Fi</string>
 </resources>

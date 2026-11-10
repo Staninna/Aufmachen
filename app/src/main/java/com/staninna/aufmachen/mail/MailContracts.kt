@@ -28,8 +28,12 @@ object SyncScheduler {
     /** First full scan (or resume), foreground job with progress notification. */
     fun startInitialScan(context: Context): Unit = SchedulerImpl.startInitialScan(context)
 
-    /** Incremental sync now (pull-to-refresh). */
-    fun syncNow(context: Context): Unit = SchedulerImpl.syncNow(context)
+    /**
+     * Sync now (pull-to-refresh, Settings). Before the first scan is done this starts that scan;
+     * [allowMetered] false makes it wait for Wi-Fi. Use [com.staninna.aufmachen.ui.common.rememberSyncNow]
+     * from the UI, which asks before a first scan on mobile data.
+     */
+    fun syncNow(context: Context, allowMetered: Boolean = true): Unit = SchedulerImpl.syncNow(context, allowMetered)
 
     /** (Re)schedules the periodic incremental sync from current settings (interval, Wi-Fi only). */
     fun schedulePeriodic(context: Context): Unit = SchedulerImpl.schedulePeriodic(context)
