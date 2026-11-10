@@ -29,13 +29,16 @@ internal object ParserText {
         return reg.substringBefore('.').takeIf { it.length >= 3 }
     }
 
+    private val marks = Regex("\\p{M}+")
+    private val nonAlnum = Regex("[^a-z0-9]+")
+
     fun normalize(s: String): String {
-        val d = Normalizer.normalize(s.lowercase(), Normalizer.Form.NFD).replace(Regex("\\p{M}+"), "")
-        return d.replace(Regex("[^a-z0-9]+"), " ").trim()
+        val d = marks.replace(Normalizer.normalize(s.lowercase(), Normalizer.Form.NFD), "")
+        return nonAlnum.replace(d, " ").trim()
     }
 
-    private fun tokens(s: String): List<String> {
-        val all = normalize(s).split(' ').filter { it.isNotEmpty() }
+    private fun tokens(norm: String): List<String> {
+        val all = norm.split(' ').filter { it.isNotEmpty() }
         val kept = all.filter { it !in noiseTokens }
         return kept.ifEmpty { all }
     }
@@ -56,30 +59,95 @@ internal object ParserText {
         return 1.0 - prev[b.length].toDouble() / maxOf(a.length, b.length)
     }
 
+    /** A name prepared once for repeated [nameSimilarity] calls. */
+    class Prepared internal constructor(
+        val norm: String,
+        val joined: String,
+        val joinedNoSpace: String,
+        val tokenSet: Set<String>,
+    )
+
+    fun prepare(s: String): Prepared {
+        val norm = normalize(s)
+        val t = tokens(norm)
+        val joined = t.joinToString(" ")
+        return Prepared(norm, joined, joined.replace(" ", ""), t.toSet())
+    }
+
     /** Fuzzy similarity of two names in 0..1. 1.0 only for equal normalised names. */
-    fun nameSimilarity(a: String, b: String): Double {
-        val na = normalize(a)
-        val nb = normalize(b)
-        if (na.isEmpty() || nb.isEmpty()) return 0.0
-        if (na == nb) return 1.0
-        val ta = tokens(a)
-        val tb = tokens(b)
-        val ja = ta.joinToString(" ")
-        val jb = tb.joinToString(" ")
+    fun nameSimilarity(a: String, b: String): Double = nameSimilarity(prepare(a), prepare(b))
+
+    fun nameSimilarity(a: Prepared, b: Prepared): Double {
+        if (a.norm.isEmpty() || b.norm.isEmpty()) return 0.0
+        if (a.norm == b.norm) return 1.0
+        val ja = a.joined
+        val jb = b.joined
         if (ja == jb) return 0.95
+        if (minOf(ja.length, jb.length) < 3) return 0.0
         var best = levenshteinRatio(ja, jb)
-        best = maxOf(best, levenshteinRatio(ja.replace(" ", ""), jb.replace(" ", "")))
-        val sa = ta.toSet()
-        val sb = tb.toSet()
-        val inter = sa.intersect(sb).size
+        best = maxOf(best, levenshteinRatio(a.joinedNoSpace, b.joinedNoSpace))
+        val sa = a.tokenSet
+        val sb = b.tokenSet
+        val inter = sa.count { it in sb }
         if (inter > 0) {
-            best = maxOf(best, inter.toDouble() / sa.union(sb).size)
+            best = maxOf(best, inter.toDouble() / (sa.size + sb.size - inter))
             val small = if (sa.size <= sb.size) sa else sb
             val big = if (small === sa) sb else sa
             if (big.containsAll(small) && small.joinToString("").length >= 3) best = maxOf(best, 0.9)
         }
-        if (minOf(ja.length, jb.length) < 3) return if (ja == jb) 0.95 else 0.0
         return best
+    }
+
+    /**
+     * Same as [nameSimilarity] when the result is at least [min], else some value below [min].
+     * Skips the edit-distance work for pairs that cannot reach [min], which keeps big pastes fast.
+     */
+    fun nameSimilarityAtLeast(a: Prepared, b: Prepared, min: Double): Double {
+        if (a.norm.isEmpty() || b.norm.isEmpty()) return 0.0
+        if (a.norm == b.norm) return 1.0
+        val ja = a.joined
+        val jb = b.joined
+        if (ja == jb) return 0.95
+        if (minOf(ja.length, jb.length) < 3) return 0.0
+        var best = 0.0
+        val sa = a.tokenSet
+        val sb = b.tokenSet
+        val inter = sa.count { it in sb }
+        if (inter > 0) {
+            best = inter.toDouble() / (sa.size + sb.size - inter)
+            val small = if (sa.size <= sb.size) sa else sb
+            val big = if (small === sa) sb else sa
+            if (big.containsAll(small) && small.joinToString("").length >= 3) best = maxOf(best, 0.9)
+        }
+        val floor = maxOf(min, best)
+        best = maxOf(best, boundedRatio(ja, jb, floor))
+        best = maxOf(best, boundedRatio(a.joinedNoSpace, b.joinedNoSpace, maxOf(floor, best)))
+        return best
+    }
+
+    /** [levenshteinRatio] when it is at least [min], else 0. */
+    private fun boundedRatio(a: String, b: String, min: Double): Double {
+        if (a == b) return 1.0
+        if (a.isEmpty() || b.isEmpty()) return 0.0
+        val maxLen = maxOf(a.length, b.length)
+        val maxDist = ((1.0 - min) * maxLen + 1e-9).toInt()
+        if (kotlin.math.abs(a.length - b.length) > maxDist) return 0.0
+        var prev = IntArray(b.length + 1) { it }
+        var cur = IntArray(b.length + 1)
+        for (i in 1..a.length) {
+            cur[0] = i
+            var rowMin = i
+            for (j in 1..b.length) {
+                val cost = if (a[i - 1] == b[j - 1]) 0 else 1
+                val v = minOf(cur[j - 1] + 1, prev[j] + 1, prev[j - 1] + cost)
+                cur[j] = v
+                if (v < rowMin) rowMin = v
+            }
+            if (rowMin > maxDist) return 0.0
+            val t = prev; prev = cur; cur = t
+        }
+        val d = prev[b.length]
+        return if (d > maxDist) 0.0 else 1.0 - d.toDouble() / maxLen
     }
 
     /** Names a candidate is known by: display names and the brand labels of its domains. */

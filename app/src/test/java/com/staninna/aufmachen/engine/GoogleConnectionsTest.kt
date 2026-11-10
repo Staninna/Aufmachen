@@ -58,4 +58,28 @@ class GoogleConnectionsTest {
         val q = GoogleConnections.candidatesFromSubject("Signed in with Google: \"Alex Tool\"", cands)
         assertEquals(listOf("tools"), q.map { it.groupKey })
     }
+
+    @Test fun matchHandlesAWholeCopiedPageQuickly() {
+        // A select-all copy of the connections page against a big mailbox froze the app (ANR).
+        val page = (1..400).joinToString("\n") { "Connected App Number $it\nHas some account access\nSince May 3, 2021" }
+        val many = (1..3000).map { ProofCandidate("svc$it", setOf("service$it.example.com"), listOf("Service Name $it", "Other Brand $it")) }
+        val names = GoogleConnections.parse(page)
+        val start = System.nanoTime()
+        GoogleConnections.match(names, many)
+        val ms = (System.nanoTime() - start) / 1_000_000
+        assertTrue("match took $ms ms", ms < 5_000)
+    }
+
+    @Test fun fastSimilarityAgreesAboveThreshold() {
+        val words = listOf("shop", "alex", "tools", "app", "bank", "bnak", "exmple", "example", "the", "team", "mail", "pay", "pal", "paypal")
+        val rnd = java.util.Random(7)
+        fun name() = (1..(1 + rnd.nextInt(3))).joinToString(" ") { words[rnd.nextInt(words.size)] }
+        repeat(5000) {
+            val a = ParserText.prepare(name())
+            val b = ParserText.prepare(name())
+            val slow = ParserText.nameSimilarity(a, b)
+            val fast = ParserText.nameSimilarityAtLeast(a, b, 0.82)
+            if (slow >= 0.82) assertEquals(slow, fast, 1e-9) else assertTrue(fast < 0.82)
+        }
+    }
 }

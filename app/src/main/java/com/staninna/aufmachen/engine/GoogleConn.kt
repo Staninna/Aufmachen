@@ -54,15 +54,24 @@ internal object GoogleConn {
         return false
     }
 
-    fun match(names: List<String>, candidates: List<ProofCandidate>): List<NameMatch> =
-        names.mapNotNull { n ->
+    fun match(names: List<String>, candidates: List<ProofCandidate>): List<NameMatch> {
+        if (names.isEmpty() || candidates.isEmpty()) return emptyList()
+        // Prepare every candidate name once; the old per-pair normalisation froze the UI on big pastes.
+        val prepared = candidates.map { c -> c.groupKey to ParserText.candidateNames(c).map(ParserText::prepare) }
+        return names.mapNotNull { n ->
+            val pn = ParserText.prepare(n)
             var best: NameMatch? = null
-            for (c in candidates) {
-                val s = ParserText.candidateNames(c).maxOfOrNull { ParserText.nameSimilarity(n, it) } ?: 0.0
-                if (s >= THRESHOLD && (best == null || s > best.score)) best = NameMatch(n, c.groupKey, s)
+            for ((key, cn) in prepared) {
+                var s = 0.0
+                for (p in cn) {
+                    s = maxOf(s, ParserText.nameSimilarityAtLeast(pn, p, maxOf(THRESHOLD, best?.score ?: 0.0)))
+                    if (s >= 1.0) break
+                }
+                if (s >= THRESHOLD && (best == null || s > best.score)) best = NameMatch(n, key, s)
             }
             best
         }
+    }
 
     fun isThirdPartyAccessHint(fromAddr: String, subject: String): Boolean {
         val host = fromAddr.substringAfterLast('@').lowercase().trim().trimEnd('>')

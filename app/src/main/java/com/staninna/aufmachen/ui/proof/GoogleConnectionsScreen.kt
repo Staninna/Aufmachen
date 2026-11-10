@@ -11,6 +11,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
@@ -84,8 +85,9 @@ fun GoogleConnectionsScreen(nav: NavHostController) {
         value = withContext(Dispatchers.IO) { readGoogleSubjects(ctx) }
     }
     val alreadyKeys = remember(services) { services.filter { it.state.googleLogin }.map { it.domain }.toSet() }
-    val suggestions = remember(subjects, candidates, alreadyKeys) {
-        subjects?.let { suggestionKeys(it, candidates, alreadyKeys) }
+    val suggestions by produceState<List<String>?>(null, subjects, candidates, alreadyKeys) {
+        val subs = subjects
+        value = subs?.let { withContext(Dispatchers.Default) { suggestionKeys(it, candidates, alreadyKeys) } }
     }
 
     Scaffold(topBar = { BackTopBar(stringResource(R.string.proof_google_title), nav) }) { pad ->
@@ -100,23 +102,33 @@ fun GoogleConnectionsScreen(nav: NavHostController) {
             }
             HorizontalDivider()
             Text(stringResource(R.string.proof_google_step2_title), style = MaterialTheme.typography.titleMedium)
-            Button(onClick = {
+            var busy by remember { mutableStateOf(false) }
+            Button(enabled = !busy, onClick = {
                 done = null
                 val text = readClipboard(ctx)?.takeIf { it.isNotBlank() }
                 if (text == null) {
                     paste = Paste.Empty
                     return@Button
                 }
-                val names = GoogleConnections.parse(text)
-                if (names.isEmpty()) {
-                    paste = Paste.NothingParsed
-                    return@Button
+                busy = true
+                scope.launch {
+                    // Parsing and fuzzy matching a whole copied page is heavy; keep it off the UI thread.
+                    val rows = withContext(Dispatchers.Default) {
+                        val names = GoogleConnections.parse(text)
+                        if (names.isEmpty()) null
+                        else reviewRows(names, GoogleConnections.match(names, candidates))
+                    }
+                    busy = false
+                    if (rows == null) {
+                        paste = Paste.NothingParsed
+                        return@launch
+                    }
+                    assigned.clear(); checked.clear()
+                    rows.forEach { assigned[it.name] = it.groupKey; checked[it.name] = it.checked }
+                    paste = Paste.Rows(rows)
                 }
-                val rows = reviewRows(names, GoogleConnections.match(names, candidates))
-                assigned.clear(); checked.clear()
-                rows.forEach { assigned[it.name] = it.groupKey; checked[it.name] = it.checked }
-                paste = Paste.Rows(rows)
             }) { Text(stringResource(R.string.proof_google_paste)) }
+            if (busy) LinearProgressIndicator(Modifier.fillMaxWidth())
 
             when (val p = paste) {
                 Paste.None -> {}
@@ -158,11 +170,11 @@ fun GoogleConnectionsScreen(nav: NavHostController) {
             HorizontalDivider()
             Text(stringResource(R.string.proof_google_suggestions), style = MaterialTheme.typography.titleMedium)
             Text(stringResource(R.string.proof_google_suggestions_body), style = MaterialTheme.typography.bodySmall)
+            val sug = suggestions
             when {
-                subjects == null && suggestions == null -> {}
-                suggestions == null -> Text(stringResource(R.string.proof_google_suggestions_error), color = MaterialTheme.colorScheme.error)
-                suggestions.isEmpty() -> Text(stringResource(R.string.proof_google_suggestions_empty))
-                else -> suggestions.forEach { key ->
+                sug == null -> {}
+                sug.isEmpty() -> Text(stringResource(R.string.proof_google_suggestions_empty))
+                else -> sug.forEach { key ->
                     Row(
                         Modifier.fillMaxWidth().clickable { suggestChecked[key] = suggestChecked[key] != true },
                         verticalAlignment = Alignment.CenterVertically,
