@@ -45,6 +45,9 @@ class MainActivity : AppCompatActivity() {
             // lock the user out of the session that just set it. It applies from the next start.
             val firstLockMode = remember { s.lockMode }
             if (firstLockMode == LockMode.NONE && s.lockMode != LockMode.NONE) unlocked = true
+            // After a restore from backup the settings say PIN but the PIN hash is gone with the
+            // Keystore key. Treat that as no lock until the user sets a new PIN.
+            if (s.lockMode == LockMode.PIN && !container.secrets.hasPin) unlocked = true
             val locked = s.lockMode != LockMode.NONE && !unlocked
             AufmachenTheme(s.theme) {
                 // The app stays composed under the lock screen, so unlocking returns to the

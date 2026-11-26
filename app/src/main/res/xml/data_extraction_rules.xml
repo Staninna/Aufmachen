@@ -1,15 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    Backups (Seedvault on GrapheneOS reports as device-transfer) carry the settings only.
+    Excluded: the SQLCipher database and the secrets prefs, both locked to this phone's Keystore
+    key and unreadable after a restore; proof PDFs, whose rows live in that database; and the
+    incoming PDF scratch folder. Keep in sync with backup_rules.xml.
+-->
 <data-extraction-rules>
     <cloud-backup>
-        <exclude domain="root" />
-        <exclude domain="file" />
         <exclude domain="database" />
-        <exclude domain="sharedpref" />
+        <exclude domain="sharedpref" path="secrets.xml" />
+        <exclude domain="file" path="proofs/" />
+        <exclude domain="file" path="incoming/" />
     </cloud-backup>
     <device-transfer>
-        <exclude domain="root" />
-        <exclude domain="file" />
         <exclude domain="database" />
-        <exclude domain="sharedpref" />
+        <exclude domain="sharedpref" path="secrets.xml" />
+        <exclude domain="file" path="proofs/" />
+        <exclude domain="file" path="incoming/" />
     </device-transfer>
 </data-extraction-rules>
