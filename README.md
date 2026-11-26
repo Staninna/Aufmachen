@@ -17,7 +17,7 @@ It reads the headers of your old mailbox and scores every sender from Critical t
 ## What it never does
 
 - It never downloads message bodies. It fetches `BODY.PEEK[HEADER.FIELDS (...)]` from a folder opened read-only.
-- It has no server and no analytics. Headers sit in a SQLCipher database whose key lives in the Android Keystore.
+- It has no server and no analytics. Headers sit in a SQLCipher database. Its key is stored in app-private storage, so a phone backup such as Seedvault can restore it. The mail app password and the PIN stay in the Android Keystore and are set again after a restore.
 - It never changes, moves or deletes mail. The only outgoing actions are sends you confirm one by one.
 
 ## Build

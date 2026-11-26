@@ -1,21 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    Backups (Seedvault on GrapheneOS reports as device-transfer) carry the settings only.
-    Excluded: the SQLCipher database and the secrets prefs, both locked to this phone's Keystore
-    key and unreadable after a restore; proof PDFs, whose rows live in that database; and the
+    Backups (Seedvault on GrapheneOS reports as device-transfer) carry the settings, the database
+    with its key (database_key.xml) and the proof PDFs.
+    Excluded: secrets.xml (app password and PIN, locked to this phone's Keystore key and unreadable
+    after a restore), the WorkManager database (jobs are scheduled again on every start) and the
     incoming PDF scratch folder. Keep in sync with backup_rules.xml.
 -->
 <data-extraction-rules>
     <cloud-backup>
-        <exclude domain="database" />
         <exclude domain="sharedpref" path="secrets.xml" />
-        <exclude domain="file" path="proofs/" />
+        <exclude domain="database" path="androidx.work.workdb" />
+        <exclude domain="database" path="androidx.work.workdb-shm" />
         <exclude domain="file" path="incoming/" />
     </cloud-backup>
     <device-transfer>
-        <exclude domain="database" />
         <exclude domain="sharedpref" path="secrets.xml" />
-        <exclude domain="file" path="proofs/" />
+        <exclude domain="database" path="androidx.work.workdb" />
+        <exclude domain="database" path="androidx.work.workdb-shm" />
         <exclude domain="file" path="incoming/" />
     </device-transfer>
 </data-extraction-rules>

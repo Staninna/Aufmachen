@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Android 11 and lower. Same excludes as data_extraction_rules.xml. -->
 <full-backup-content>
-    <exclude domain="database" />
     <exclude domain="sharedpref" path="secrets.xml" />
-    <exclude domain="file" path="proofs/" />
+    <exclude domain="database" path="androidx.work.workdb" />
+    <exclude domain="database" path="androidx.work.workdb-shm" />
     <exclude domain="file" path="incoming/" />
 </full-backup-content>

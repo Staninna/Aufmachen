@@ -1,6 +1,7 @@
 package com.staninna.aufmachen.data
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
 import android.util.Base64
@@ -13,11 +14,12 @@ import javax.crypto.SecretKey
 import javax.crypto.spec.GCMParameterSpec
 
 /**
- * Small secrets (app password, database passphrase, PIN hash) encrypted with an AES-GCM key
- * that lives in the Android Keystore and never leaves it.
+ * Small secrets (app password, PIN hash) encrypted with an AES-GCM key that lives in the Android
+ * Keystore and never leaves it. The database passphrase is the exception, see [databasePassphrase].
  */
-class SecretStore(context: Context) {
+class SecretStore(private val context: Context) {
     private val prefs = context.getSharedPreferences("secrets", Context.MODE_PRIVATE)
+    private val dbKey = context.getSharedPreferences(DB_KEY_FILE, Context.MODE_PRIVATE)
 
     private fun key(): SecretKey {
         val ks = KeyStore.getInstance("AndroidKeyStore").apply { load(null) }
@@ -55,14 +57,16 @@ class SecretStore(context: Context) {
         get() = get(IMAP_PASSWORD)
         set(v) = put(IMAP_PASSWORD, v?.replace(" ", ""))
 
-    /** Random 32-byte passphrase for SQLCipher, created on first use. */
-    fun databasePassphrase(): ByteArray {
-        val existing = get(DB_PASSPHRASE)
-        if (existing != null) return Base64.decode(existing, Base64.NO_WRAP)
-        val fresh = ByteArray(32).also { SecureRandom().nextBytes(it) }
-        put(DB_PASSPHRASE, Base64.encodeToString(fresh, Base64.NO_WRAP))
-        return fresh
-    }
+    /**
+     * Random 32-byte passphrase for SQLCipher. Kept in plain app-private prefs, not under the
+     * Keystore, so a system backup restores it together with the database.
+     */
+    fun databasePassphrase(): ByteArray = loadDatabasePassphrase(
+        dbKey,
+        legacy = { get(DB_PASSPHRASE) },
+        dropLegacy = { prefs.edit().remove(DB_PASSPHRASE).commit() },
+        onFresh = { context.deleteDatabase(AppDatabase.NAME) },
+    )
 
     fun setPin(pin: String?) = put(PIN_HASH, pin?.let { hashPin(it) })
     fun checkPin(pin: String): Boolean = get(PIN_HASH)?.let { it == hashPin(pin) } ?: false
@@ -77,6 +81,7 @@ class SecretStore(context: Context) {
 
     fun wipe() {
         prefs.edit().clear().apply()
+        dbKey.edit().clear().commit()
         runCatching { KeyStore.getInstance("AndroidKeyStore").apply { load(null) }.deleteEntry(ALIAS) }
     }
 
@@ -86,5 +91,29 @@ class SecretStore(context: Context) {
         const val DB_PASSPHRASE = "db_passphrase"
         const val PIN_HASH = "pin_hash"
         const val PIN_SALT = "pin_salt"
+        const val DB_KEY_FILE = "database_key"
     }
+}
+
+private const val DB_KEY = "passphrase"
+
+/**
+ * Returns the passphrase saved in [store]. Without one, moves the older Keystore-wrapped copy
+ * from [legacy] over, or makes a new one. A new passphrase cannot open an old database, so
+ * [onFresh] deletes any leftover one first and the app starts empty instead of crashing.
+ */
+internal fun loadDatabasePassphrase(
+    store: SharedPreferences,
+    legacy: () -> String?,
+    dropLegacy: () -> Unit,
+    onFresh: () -> Unit,
+): ByteArray {
+    store.getString(DB_KEY, null)?.let { return Base64.decode(it, Base64.NO_WRAP) }
+    val old = legacy()
+    if (old == null) onFresh()
+    val encoded = old ?: Base64.encodeToString(ByteArray(32).also { SecureRandom().nextBytes(it) }, Base64.NO_WRAP)
+    // commit, not apply: the database must never be opened with a key that is not on disk yet.
+    check(store.edit().putString(DB_KEY, encoded).commit()) { "Could not save the database key" }
+    if (old != null) dropLegacy()
+    return Base64.decode(encoded, Base64.NO_WRAP)
 }
